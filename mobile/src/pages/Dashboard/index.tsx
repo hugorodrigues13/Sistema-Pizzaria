@@ -2,11 +2,11 @@ import React, {useContext, useState} from "react"
 import { View, Text, SafeAreaView, TouchableOpacity, TextInput, StyleSheet } from "react-native"
 
 import { AuthContext } from "../../contexts/AuthContext"
-
 import { useNavigation } from "@react-navigation/native"
-
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { StackPramsList } from "../../routes/app.routes"
+
+import { api } from "../../services/api"
 
 export default function Dashboard(){
     const navigation = useNavigation<NativeStackNavigationProp<StackPramsList>>();
@@ -19,8 +19,14 @@ export default function Dashboard(){
             return;
         }
 
+        const response = await api.post('/order', {
+            table: Number(number)
+        })
+
         //precisa fazer a requisição e abrir a mesa e navegar para proxima tela
-        navigation.navigate('Order', { number: number, order_id: ''})
+        navigation.navigate('Order', { number: number, order_id: response.data.id})
+
+        setNumber('')
     }
 
 

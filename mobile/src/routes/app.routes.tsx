@@ -1,12 +1,22 @@
-import React from "react";
+import React, {useContext, useState} from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { AuthContext } from "../contexts/AuthContext"
 
 import Dashboard from "../pages/Dashboard";
 import Order from "../pages/Order";
+import FinishOrder from "../pages/FinishOrder";
+
+import { SimpleLineIcons } from '@expo/vector-icons';
+
 
 export type StackPramsList = {
     Dashboard: undefined;
     Order: {
+        number: number | string;
+        order_id: string;
+    };
+    FinishOrder: {
         number: number | string;
         order_id: string;
     };
@@ -15,18 +25,47 @@ export type StackPramsList = {
 const Stack = createNativeStackNavigator<StackPramsList>();
 
 function AppRoutes(){
+    const {signOut} = useContext(AuthContext)
+
     return(
-        <Stack.Navigator>
-            <Stack.Screen 
-                name="Dashboard" 
-                component={Dashboard} 
-                options={{headerShown: false}}
-            />
+            <Stack.Navigator>
+                   <Stack.Screen 
+                        name="Dashboard" 
+                        component={Dashboard} 
+                        options={{
+                        title: 'Sujeito Pizzaria',
+                        headerStyle: {
+                            backgroundColor: '#1d1d2e',
+                        },
+                        headerTintColor: '#fff',
+                        headerRight: () => (
+                            <TouchableOpacity
+                                onPress={signOut}
+                                style={{alignItems: 'center'}}
+                            >
+                               <SimpleLineIcons name="logout" size={20} color="#fff" />
+                            </TouchableOpacity>
+                        ),
+                        }}
+                    />
 
             <Stack.Screen 
                 name="Order" 
                 component={Order} 
-                options={{headerShown: false}}
+                options={{headerShown: false, title: '',}}
+             />
+
+             <Stack.Screen
+                name="FinishOrder"
+                component={FinishOrder}
+                options={{
+                    title: 'Finalizando',
+                    headerStyle: {
+                        backgroundColor: '#1d1d2e',
+                    },
+                    headerTintColor: '#fff',
+                }}
+             
              />
         </Stack.Navigator>
     )
