@@ -38,14 +38,14 @@ export default function SignIn(){
                 <TextInput 
                     placeholder="Digite seu email"
                     style={styles.input}
-                    placeholderTextColor="#F0F0F0"
+                    placeholderTextColor="#CCDBDC"
                     value={email}
                     onChangeText={setEmail}
                 />
                 <TextInput 
                     placeholder="Sua senha"
                     style={styles.input}
-                    placeholderTextColor="#F0F0F0"
+                    placeholderTextColor="#CCDBDC"
                     secureTextEntry={true}
                     value={password}
                     onChangeText={setPassword}
@@ -55,7 +55,7 @@ export default function SignIn(){
                     {loadingAuth ? (
                         <ActivityIndicator size={25} color="#fff" />
                     ): (
-                        <Text style={styles.buttonText}>Acessar</Text>
+                        <Text style={styles.buttonText}>ENTRAR</Text>
                     )}
                 </TouchableOpacity>
             </View>
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1d1d2e'
+        backgroundColor: '#003249'
     },
     logo:{
         marginBottom: 18,
@@ -83,23 +83,23 @@ const styles = StyleSheet.create({
     input:{
         width: '95%',
         height: 40,
-        backgroundColor: '#101026',
+        backgroundColor: '#007EA7',
         marginBottom: 14,
-        borderRadius: 4,
+        borderRadius: 12,
         paddingHorizontal: 8,
         color: '#FFF'
     },
     button:{
         width: '95%',
         height: 40,
-        backgroundColor: '#3fffa3',
-        borderRadius: 4,
+        backgroundColor: '#051923',
+        borderRadius: 12,
         justifyContent: 'center',
         alignItems: 'center',
     },
     buttonText:{
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#101026'
+        color: '#CCDBDC'
     }
 })

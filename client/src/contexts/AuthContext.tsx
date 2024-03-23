@@ -100,7 +100,7 @@ export function AuthProvider({ children }: AuthProviderProps){
             Router.push('/dashboard')
 
         }catch(err){
-                toast.error("Erro ao acessar!")
+                toast.error("Erro ao acessar, e-mail ou senha inválidos!")
                 console.log("Error ao acessar", err)
         }
         

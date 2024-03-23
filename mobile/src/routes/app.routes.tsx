@@ -33,17 +33,22 @@ function AppRoutes(){
                         name="Dashboard" 
                         component={Dashboard} 
                         options={{
-                        title: 'Sujeito Pizzaria',
-                        headerStyle: {
-                            backgroundColor: '#1d1d2e',
-                        },
+                            headerTitle: () => (
+                                <Text style={{ color: '#FFF', fontWeight: 'bold', fontSize: 20 }}>
+                                    <Text style={{ color: '#FFFFFF' }}>Sujeito</Text>
+                                    <Text style={{ color: '#FF0707' }}> Pizza</Text>
+                                </Text>
+                            ),
+                            headerStyle: {
+                                backgroundColor: '#003249',
+                            },
                         headerTintColor: '#fff',
                         headerRight: () => (
                             <TouchableOpacity
                                 onPress={signOut}
                                 style={{alignItems: 'center'}}
                             >
-                               <SimpleLineIcons name="logout" size={20} color="#fff" />
+                               <SimpleLineIcons name="logout" size={20} color="#CCDBDC" />
                             </TouchableOpacity>
                         ),
                         }}
@@ -61,7 +66,7 @@ function AppRoutes(){
                 options={{
                     title: 'Finalizando',
                     headerStyle: {
-                        backgroundColor: '#1d1d2e',
+                        backgroundColor: '#003249',
                     },
                     headerTintColor: '#fff',
                 }}

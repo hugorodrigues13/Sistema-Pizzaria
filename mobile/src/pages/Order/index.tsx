@@ -117,11 +117,17 @@ export default function Order(){
                 amount: Number(amount)
             }
     
-            console.log('Antes de adicionar:', items);
+            const existingItemIndex = items.findIndex(item => item.product_id === data.product_id);
     
-            setItems(oldArray => [...oldArray, data]);
-    
-            console.log('Depois de adicionar:', items);
+            if (existingItemIndex !== -1) {
+                // Se o item já estiver na lista, atualize a quantidade
+                const updatedItems = [...items];
+                updatedItems[existingItemIndex].amount += data.amount;
+                setItems(updatedItems);
+            } else {
+                // Se o item não estiver na lista, adicione-o normalmente
+                setItems(oldArray => [...oldArray, data]);
+            }
         } catch (error) {
             console.error('Erro ao adicionar item:', error);
         }
@@ -153,7 +159,7 @@ export default function Order(){
     return(
         <View style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Mesa {route.params.number}</Text>
+                <Text style={styles.title}>Pedido {route.params.number}</Text>
                 <TouchableOpacity onPress={handleCloseOrder} style={[{opacity: items.length === 0 ? 1 : 0.3}]} disabled={items.length > 0}>
                     <Feather name="trash-2" size={28} color="#ff3f4b"/>
                 </TouchableOpacity>
@@ -188,7 +194,7 @@ export default function Order(){
 
             <View style={styles.actions}>
                 <TouchableOpacity style={styles.buttonAdd} onPress={handleAddItem}>
-                    <Text style={styles.buttonText}>+</Text>
+                    <Text style={styles.iconText}>+</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity 
@@ -244,7 +250,7 @@ const styles = StyleSheet.create({
         paddingVertical: '5%',
         paddingEnd: '4%',
         paddingStart: '4%',
-        backgroundColor: '#1d1d2e',
+        backgroundColor: '#003249',
     },
 
     header: {
@@ -261,7 +267,7 @@ const styles = StyleSheet.create({
         marginRight: 14
     },
     input: {
-        backgroundColor: '#101026',
+        backgroundColor: '#007EA7',
         borderRadius: 4,
         width: '100%',
         height: 40,
@@ -290,7 +296,7 @@ const styles = StyleSheet.create({
     },
 
     buttonAdd: {
-        backgroundColor: '#3fd1ff',
+        backgroundColor: '#CCDBDC',
         height: 40,
         width: '20%',
         alignItems: 'center',
@@ -298,18 +304,24 @@ const styles = StyleSheet.create({
         borderRadius: 4,
     },
 
-    buttonText: {
-        color: '#101026',
+    iconText: {
+        color: '#051923',
         fontSize: 20,
         fontWeight: 'bold'
     },
 
     button: {
-        backgroundColor: '#3fffa3',
+        backgroundColor: '#051923',
         borderRadius: 4,
         height: 40,
         width: '75%',
         alignItems: 'center',
         justifyContent: 'center'
-    }
+    },
+
+    buttonText: {
+        color: '#CCDBDC',
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
 })

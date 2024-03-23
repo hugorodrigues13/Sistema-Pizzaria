@@ -35,8 +35,8 @@ export default function Dashboard(){
             <Text style={styles.title}>Novo pedido</Text>
 
             <TextInput
-                placeholder="Numero da mesa"
-                placeholderTextColor="#F0F0F0"
+                placeholder="Número do pedido"
+                placeholderTextColor="#CCDBDC"
                 style={styles.input}
                 keyboardType='numeric'
                 value={number}
@@ -44,7 +44,7 @@ export default function Dashboard(){
             />
 
             <TouchableOpacity style={styles.button} onPress={openOrder}>
-                <Text style={styles.buttonText}>Abrir Mesa</Text>
+                <Text style={styles.buttonText}>Criar pedido</Text>
             </TouchableOpacity>
 
         </SafeAreaView>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 15,
-        backgroundColor: '#1d1d2e'
+        backgroundColor: '#003249'
     },
 
     title:{
@@ -71,9 +71,9 @@ const styles = StyleSheet.create({
     input: {
         width: '90%',
         height: 60,
-        backgroundColor: '#101026',
+        backgroundColor: '#007EA7',
         paddingHorizontal: 8,
-        borderRadius: 4,
+        borderRadius: 12,
         textAlign: 'center',
         fontSize: 22,
         color: '#FFF'
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
     button:{
         width: '90%',
         height: 40,
-        backgroundColor: '#3fffa3',
-        borderRadius: 4,
+        backgroundColor: '#051923',
+        borderRadius: 12,
         marginVertical: 12,
         justifyContent: 'center',
         alignItems: 'center'
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
 
     buttonText:{
         fontSize: 18,
-        color: '#101026',
+        color: '#CCDBDC',
         fontWeight: 'bold',
     },
 })

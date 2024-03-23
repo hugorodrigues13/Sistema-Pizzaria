@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { Feather } from '@expo/vector-icons'
 
@@ -36,11 +36,11 @@ export default function FinishOrder(){
     return(
         <View style={styles.container}>
             <Text style={styles.alert}>Você deseja finalizar esse pedido?</Text>
-            <Text style={styles.title}>Mesa {route.params?.number}</Text>
+            <Text style={styles.alert}>Pedido: {route.params?.number}</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleFinish}>
                 <Text style={styles.textButton}>Finalizar Pedido</Text>
-                <Feather name="shopping-cart" size={20} color="#1d1d2e" />
+                <Feather name="shopping-cart" size={20} color="#CCDBDC" />
             </TouchableOpacity>
         </View>
     )
@@ -49,7 +49,7 @@ export default function FinishOrder(){
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#1d1d2e',
+        backgroundColor: '#003249',
         paddingVertical: '5%',
         paddingHorizontal: '4%',
         alignItems: 'center',
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 
     alert:{
         fontSize: 20,
-        color: '#FFF',
+        color: '#CCDBDC',
         fontWeight: 'bold',
         marginBottom: 14
     },
@@ -70,20 +70,20 @@ const styles = StyleSheet.create({
     },
 
     button:{
-        backgroundColor: '#3fffa3',
+        backgroundColor: '#051923',
         flexDirection: 'row',
         width: '65%',
-        height: 40,
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 4
+        borderRadius: 12
     },
 
     textButton:{
         fontSize: 18,
         marginRight: 8,
         fontWeight: 'bold',
-        color: '#1d1d2e',
+        color: '#CCDBDC',
     }
     
 })

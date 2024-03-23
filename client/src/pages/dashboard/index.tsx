@@ -98,31 +98,33 @@ export default function Dashboard({orders}: HomeProps){
                 <Header/>
 
                 <main className={styles.container}>
-                    <div className={styles.containerHeader}>
-                        <h1>Últimos pedidos</h1>
-                        <button onClick={handlRefreshOrders}>
-                            <FiRefreshCcw size={25} color="#3fffa3" />    
-                        </button>  
-                    </div>
+                    <div className={styles.headerOrder}>
+                        <div className={styles.containerHeader}>
+                            <h1>Últimos pedidos</h1>
+                            <button onClick={handlRefreshOrders}>
+                                <FiRefreshCcw size={25} color="#3fffa3" />    
+                            </button>  
+                        </div>
 
-                    <article className={styles.listOrders}>
+                        <article className={styles.listOrders}>
 
-                        {orderList.length === 0 && (
-                            <span className={styles.emptyList}>
-                                Nenhum pedido aberto foi encontrado...
-                            </span>
-                        )}
+                            {orderList.length === 0 && (
+                                <span className={styles.emptyList}>
+                                    Nenhum pedido aberto foi encontrado...
+                                </span>
+                            )}
 
-                        {orderList.map(item => (
-                            <section key={item.id} className={styles.orderItem}>
-                                <button onClick={() => handleOpenModal(item.id)}>
-                                    <div className={styles.tag}></div>
-                                    <span>Mesa {item.table}</span>
-                                </button>
-                            </section>
-                        ))}
+                            {orderList.map(item => (
+                                <section key={item.id} className={styles.orderItem}>
+                                    <button onClick={() => handleOpenModal(item.id)}>
+                                        <div className={styles.tag}></div>
+                                        <span>Pedido Nº: {item.table}</span>
+                                    </button>
+                                </section>
+                            ))}
 
-                    </article>   
+                        </article>
+                    </div> 
                 </main>
 
                 { modalVisible && (
