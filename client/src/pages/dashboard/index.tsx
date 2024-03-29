@@ -2,6 +2,8 @@ import { useState } from "react"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
 
+import { Container, HeaderContent, Body, ListOrders } from "./styles"
+
 import { Header } from "@/components/Header"
 import styles from './styles.module.scss'
 import { FiRefreshCcw } from "react-icons/fi"
@@ -94,38 +96,36 @@ export default function Dashboard({orders}: HomeProps){
            <Head>
                 <title>Painel - Sujeito Pizzaria</title>
            </Head>
-           <div>
+           <>
                 <Header/>
 
-                <main className={styles.container}>
-                    <div className={styles.headerOrder}>
-                        <div className={styles.containerHeader}>
+                <Container>
+                    <Body>
+                        <HeaderContent>
                             <h1>Últimos pedidos</h1>
                             <button onClick={handlRefreshOrders}>
                                 <FiRefreshCcw size={25} color="#3fffa3" />    
                             </button>  
-                        </div>
+                        </HeaderContent>
 
-                        <article className={styles.listOrders}>
-
+                        <ListOrders>
                             {orderList.length === 0 && (
-                                <span className={styles.emptyList}>
+                                <span className="emptyList">
                                     Nenhum pedido aberto foi encontrado...
                                 </span>
                             )}
 
                             {orderList.map(item => (
-                                <section key={item.id} className={styles.orderItem}>
+                                <section key={item.id} className="orderItem">
                                     <button onClick={() => handleOpenModal(item.id)}>
-                                        <div className={styles.tag}></div>
+                                        <div className="tag"></div>
                                         <span>Pedido Nº: {item.table}</span>
                                     </button>
                                 </section>
                             ))}
-
-                        </article>
-                    </div> 
-                </main>
+                        </ListOrders>
+                    </Body> 
+                </Container>
 
                 { modalVisible && (
                     <ModalOrder 
@@ -136,7 +136,7 @@ export default function Dashboard({orders}: HomeProps){
                     />
                 )}
 
-           </div>
+           </>
         </>
     )
 }

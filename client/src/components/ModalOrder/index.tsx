@@ -1,5 +1,6 @@
 import Modal from 'react-modal'
 import styles from './style.module.scss'
+import { Container, HeaderContent, Content, ListContent, ButtonFooter } from './styles'
 
 import {FiX} from 'react-icons/fi'
 
@@ -28,7 +29,10 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder}: 
             padding: '30px',
             transform: 'translate(-50%, -50%)',
             backgroundColor: '#CCDBDC',
-        }
+        },
+        overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)' // Aqui você pode definir a cor de fundo desejada, 0.5 é a opacidade
+          }
     }
 
       // Agrupar itens por nome e calcular a quantidade total de cada item
@@ -39,6 +43,7 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder}: 
             acc[currentItem.product.name].amount += currentItem.amount;
         }
         return acc;
+        
     }, {});
 
     return(
@@ -47,42 +52,56 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder}: 
             onRequestClose={onRequestClose}
             style={customStyles}
         >
-            <div className={styles.containerHeader}>
-                <button
-                    type='button'
-                    onClick={onRequestClose}
-                    className={styles.buttonClose}
-                    style={{background: 'transparent', border: 0}}
-                >
-                    <FiX size={45} color='#f34748' />
-                </button>
-                <div className={styles.table}>
-                    <strong>Pedido Nº: {tableNumber}</strong>
-                </div>
-            </div>
-            <div className={styles.container}>
-                <div className={styles.containerBody}>
-                    <span>Detalhes do pedido</span>
-                </div>
-                <div className={styles.scroll}>
-                    {groupedItems && Object.values(groupedItems).map(item => (
-                            <section key={item.id} className={styles.containerItem}>
-                                <div><strong>{item.amount} - {item.product.name}</strong></div>
-                            </section>
-                        ))}
-                 </div>
-                 <div className={styles.observacao}>
-                    <span>Observação...</span>
-                 </div>
-                <div className={styles.divButton}>
-                    <button className={styles.buttonOrder} onClick={ () => handleFinishOrder(orderId)}>
-                        Concluir
+
+            <Container>
+                <HeaderContent>
+                    <button
+                        type='button'
+                        onClick={onRequestClose}
+                        className="buttonClose"
+                        style={{background: 'transparent', border: 0}}
+                    >
+                        <FiX size={45} color='#f34748' />
                     </button>
-                    <button className={styles.buttonCancel} onClick={ () => handleFinishOrder(orderId)}>
-                        Cancelar pedido
-                    </button>
-                </div>
-            </div>
+                    <div className="numberOrder">
+                        <strong>Pedido Nº: {tableNumber}</strong>
+                    </div>
+                </HeaderContent>
+
+                <Content>
+                    <p>Detalhes do pedido</p>
+                    <ListContent>
+                        {groupedItems && Object.values(groupedItems).map(item => (
+                            
+                                <section key={item.id} className="containerItem">
+                                    <div>
+                                        <strong>{item.amount} - {item.product.name}</strong>
+                                    </div>
+                                </section>
+                                
+                            ))}
+                            
+                    </ListContent>
+                    
+                    {order && order[0] && order[0].order.name !== null ? (
+                        <div className='scroll-container'>
+                            <span>{order[0].order.name}</span>
+                        </div>
+                        ) : (
+                            <span>Sem observação..</span>
+                    )}
+
+
+                    <ButtonFooter>
+                        <button className="buttonOrder" onClick={ () => handleFinishOrder(orderId)}>
+                            Concluir
+                        </button>
+                        <button className="buttonCancel" onClick={ () => handleFinishOrder(orderId)}>
+                            Cancelar pedido
+                        </button>
+                    </ButtonFooter>
+                </Content>
+            </Container>
 
         </Modal>
     )

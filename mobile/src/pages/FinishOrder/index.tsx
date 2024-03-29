@@ -12,6 +12,7 @@ type RouteDetailParams = {
     FinishOrder: {
         number: string | number;
         order_id: string;
+        name: string;
     }
 }
 

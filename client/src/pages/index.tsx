@@ -1,6 +1,8 @@
 import { useContext, FormEvent, useState } from 'react'
 import { canSSRGuest } from '@/utils/canSSRGuest'
-import styles from '../../styles/home.module.scss'
+
+import { Container, Content, Text } from './styles'
+
 import Image from 'next/image'
 import Head from 'next/head'
 import { Input } from '@/components/ui/Input'
@@ -8,9 +10,7 @@ import { Button } from '@/components/ui/Button'
 import Link from 'next/link'
 
 import logoImg from '../../public/logo.svg'
-
 import { AuthContext } from '@/contexts/AuthContext'
-
 import { toast } from 'react-toastify'
 
 export default function Home(){
@@ -48,10 +48,10 @@ export default function Home(){
                 SujeitoPizza - Faça seu login
             </title>
         </Head>
-        <div className={styles.containerCenter}>
+        <Container>
             <Image src={logoImg} alt='logo sujeito pizzaria' />
 
-            <div className={styles.login}>
+            <Content>
                 <form onSubmit={handleLogin}>
                     <Input 
                         type='text'
@@ -75,11 +75,11 @@ export default function Home(){
                 </form>
 
                 <Link href="/signup">
-                    <p className={styles.text}>Não possui uma conta? Cadastre-se</p>
+                    <Text>Não possui uma conta? Cadastre-se</Text>
                 </Link>
 
-            </div>
-        </div>
+            </Content>
+        </Container>
         </>
     )
 }

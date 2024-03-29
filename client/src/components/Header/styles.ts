@@ -1,9 +1,6 @@
-.headerContainer{
-    height: 5rem;
+import styled from "styled-components";
 
-}
-
-.headerContent{
+export const Container = styled.header`
     max-width: 1120px;
     height: 5rem;
     margin: 0 auto;
@@ -16,14 +13,14 @@
     img{
         cursor: pointer;
     }
-}
+`;
 
-.menuNav{
+export const NavHeader = styled.nav`
     display: flex;
     align-items: center;
 
-    p {
-        color: var(--white);
+    .menuNav {
+        color: ${props => props.theme.colors.gray};
         padding: 0 0.5rem;
         display: inline-block;
         position: relative;
@@ -31,7 +28,7 @@
         transition: color 0.7s;
     
         &:hover{
-            color: var(--red-900);
+            color: ${props => props.theme.colors.info};
         }
     }
 
@@ -45,4 +42,4 @@
             transform: scale(1.2);
         }
     }
-}
+`;
