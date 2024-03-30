@@ -2,10 +2,10 @@ import { useState } from "react"
 import { canSSRAuth } from "@/utils/canSSRAuth"
 import Head from "next/head"
 
-import { Container, HeaderContent, Body, ListOrders } from "./styles"
+import { Container, HeaderContent, Body, ListOrders, Card } from "./styles"
 
 import { Header } from "@/components/Header"
-import styles from './styles.module.scss'
+import { BoxCard } from "@/components/BoxCard"
 import { FiRefreshCcw } from "react-icons/fi"
 
 import { setupAPIClient } from "@/services/api"
@@ -100,6 +100,26 @@ export default function Dashboard({orders}: HomeProps){
                 <Header/>
 
                 <Container>
+                    <Card>
+                        <BoxCard 
+                            color="#80FFDB" 
+                            name="Concluídos"
+                            icon="concluido"
+                            table="200"
+                        />
+                        <BoxCard 
+                            color="#40A2E3" 
+                            name="Em andamento"
+                            icon="andamento"
+                            table="200"
+                        />
+                        <BoxCard 
+                            color="#FF3F4B" 
+                            name="Cancelados"
+                            icon="cancelado"
+                            table="200"
+                        />
+                    </Card>
                     <Body>
                         <HeaderContent>
                             <h1>Últimos pedidos</h1>

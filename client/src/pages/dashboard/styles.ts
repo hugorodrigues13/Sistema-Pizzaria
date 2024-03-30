@@ -13,6 +13,13 @@ export const Container = styled.main`
     }
 `;
 
+export const Card = styled.div`
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+`;
+
 export const Body = styled.div`
     background-color: ${props => props.theme.colors.tertiary};
     padding: 1rem;
@@ -37,6 +44,24 @@ export const HeaderContent = styled.div`
 export const ListOrders = styled.article`
     display: flex;
     flex-direction: column;
+    height: 380px;
+    overflow-y: auto;
+
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: ${props => props.theme.colors.tertiary} ${props => props.theme.colors.primary}; /* Firefox */
+
+    /* Estilos para WebKit (Chrome, Safari) */
+    &::-webkit-scrollbar {
+        width: 10px;
+        /* Largura da barra de rolagem */
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: ${props => props.theme.colors.blue}; /* Cor do polegar da barra de rolagem */
+    }
+    &::-webkit-scrollbar-track {
+        background-color: ${props => props.theme.colors.primary}; /* Cor da trilha da barra de rolagem */
+        border-radius: 12px; /* Raio de borda da trilha */
+    }
 
     .emptyList{
         font-size: 1.2rem;
@@ -48,6 +73,7 @@ export const ListOrders = styled.article`
         flex-direction: row;
         background-color: ${props => props.theme.colors.blue};
         margin-bottom: 1rem;
+        margin: 0 1rem 1rem 0;
         align-items: center;
         border-radius: 12px;
 

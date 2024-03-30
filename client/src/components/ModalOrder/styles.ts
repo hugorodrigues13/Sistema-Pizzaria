@@ -63,20 +63,7 @@ export const Content = styled.div`
         word-wrap: break-word;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: ${props => props.theme.colors.primary} ${props => props.theme.colors.gray}; /* Firefox */
-
-        /* Estilos para WebKit (Chrome, Safari) */
-        &::-webkit-scrollbar {
-            width: 10px;
-            /* Largura da barra de rolagem */
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: ${props => props.theme.colors.blue}; /* Cor do polegar da barra de rolagem */
-        }
-        &::-webkit-scrollbar-track {
-            background-color: ${props => props.theme.colors.primary}; /* Cor da trilha da barra de rolagem */
-            border-radius: 12px; /* Raio de borda da trilha */
-        }
+        scrollbar-color: #C1C7C8 ${props => props.theme.colors.gray}; /* Firefox */
     }
 
 `;
@@ -88,19 +75,7 @@ export const ListContent = styled.div`
         overflow-y: auto;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: ${props => props.theme.colors.blue} ${props => props.theme.colors.primary}; /* Firefox */
-
-        /* Estilos para WebKit (Chrome, Safari) */
-        &::-webkit-scrollbar {
-            width: 10px; /* Largura da barra de rolagem */
-        }
-        &::-webkit-scrollbar-thumb {
-            background-color: ${props => props.theme.colors.blue}; /* Cor do polegar da barra de rolagem */
-            border-radius: 12px; /* Raio de borda do polegar */
-        }
-        &::-webkit-scrollbar-track {
-            background-color: ${props => props.theme.colors.blue}; /* Cor da trilha da barra de rolagem */
-        }
+        scrollbar-color: ${props => props.theme.colors.gray} #C1C7C8; /* Firefox */
 
         .containerItem{
             display: flex;

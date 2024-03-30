@@ -30,8 +30,7 @@ export const MainContent = styled.main`
         padding: 1rem;
         height: 40px;
         border-radius: 0.3rem;
-        color: var(--white);
-        border: 1px solid ${props => props.theme.colors.success};
+        color: ${props => props.theme.colors.tertiary};
         margin-bottom: 1rem;
 
     }
