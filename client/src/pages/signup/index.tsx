@@ -1,5 +1,7 @@
 import { useState, FormEvent, useContext } from 'react'
 import styles from '../../../styles/home.module.scss'
+import {Container, Content, Text} from '../styles'
+
 import Image from 'next/image'
 import Head from 'next/head'
 import { Input } from '@/components/ui/Input'
@@ -48,10 +50,10 @@ export default function Signup(){
                 Faça seu cadastro
             </title>
         </Head>
-        <div className={styles.containerCenter}>
+        <Container>
             <Image src={logoImg} alt='logo sujeito pizzaria' />
 
-            <div className={styles.login}>
+            <Content>
             <h1>Criando sua conta</h1>
                 <form onSubmit={handleSignUp}>
                     <Input 
@@ -82,11 +84,11 @@ export default function Signup(){
                 </form>
 
                 <Link href="/">
-                    <p className={styles.text}>Já possui uma conta?</p>
+                    <Text>Já possui uma conta?</Text>
                 </Link>
 
-            </div>
-        </div>
+            </Content>
+        </Container>
         </>
     )
 }

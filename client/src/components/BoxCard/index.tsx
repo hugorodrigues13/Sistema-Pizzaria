@@ -1,7 +1,7 @@
 import React from "react";
-
-import styles from './styles.module.scss'
 import Image from "next/image";
+
+import { Container } from "./styles";
 import CountUp from "react-countup";
 
 import canceladoImg from '@/assets/cancelado.svg';
@@ -9,16 +9,13 @@ import concluidoImg from '@/assets/concluido.svg';
 import andamentoImg from '@/assets/em-andamento.svg';
 
 interface IBoxCard {
-    id: string;
     table: string;
-    status: boolean;
-    draft: boolean;
     name: string;
     icon: 'cancelado' | 'concluido' | 'andamento';
     color: string;
 }
 
-export const BoxCard = ({table, status, draft, name, icon, color}: IBoxCard) => {
+export const BoxCard = ({table, name, icon, color}: IBoxCard) => {
 
     const iconSelected = () => {
         switch (icon) {
@@ -33,10 +30,15 @@ export const BoxCard = ({table, status, draft, name, icon, color}: IBoxCard) => 
         }
     }
 
-  
     return (
-        <div className={styles.container}>
-            <span>{}</span>
-        </div>
+        <Container color={color}>
+                <div className="cardItem">
+                    <h3>{name}</h3>
+                    <h1>
+                        {table}
+                    </h1>
+                </div>
+            <Image src={iconSelected()} alt={name}  priority={true} />
+        </Container>
     )
 }

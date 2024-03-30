@@ -1,9 +1,11 @@
-.button {
+import styled from "styled-components";
+
+export const ButtonContainer = styled.button`
     max-width: 600px;
-    background-color: var(--red-900);
+    background-color: ${props => props.theme.colors.black};
     border: 0;
     padding: 0.4rem;
-    color: var(--white);
+    color: ${props => props.theme.colors.white};
     border-radius: 0.5rem;
     transition: filter 0.2s;
 
@@ -15,19 +17,19 @@
     }
 
     &:hover{
-        filter: brightness(1.08);
+        filter: brightness(1.15);
     }
-}
 
-.buttonText {
-    color: var(--white);
-}
+    > span {
+        color: ${props => props.theme.colors.white};
+    }
 
-@keyframes animate{
+    @keyframes animate {
     from{
         transform: rotate(0deg);
     }
     to{
         transform: rotate(360deg);
     }
-}
+    }
+`;

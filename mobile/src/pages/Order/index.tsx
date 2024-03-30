@@ -12,8 +12,9 @@ import { api } from '../../services/api';
 
 type RouteDetailParams = {
     Order: {
-        number: string | number;
         order_id: string;
+        number: string | number;
+        name: string;
     }
 }
 
@@ -50,6 +51,8 @@ export default function Order(){
 
     const [amount, setAmount] = useState('1')
     const [items, setItems] = useState<ItemProps[]>([])
+
+    const [observation, setObservation] = useState('');
 
     useEffect(() => {
         async function loadInfo(){
@@ -148,11 +151,15 @@ export default function Order(){
        setItems(removeItem)
     }
 
+    async function handleObservationChange(name: string) {
+        console.log('Observation changed:', name);
+        setObservation(name);
+      };
+
     function handleFinishOrder(){
         navigation.navigate('FinishOrder', { 
             number: route.params?.number,
             order_id: route.params?.order_id,
-
         })
     }
 
@@ -213,6 +220,16 @@ export default function Order(){
                 keyExtractor={(item) => item.id}
                 renderItem={({item}) => <ListItem data={item} deleteItem={handleDeleteItem}/>}
             />
+
+                <TextInput
+                    style={styles.textArea}
+                    multiline
+                    numberOfLines={4}
+                    value={observation}
+                    onChangeText={handleObservationChange}
+                    placeholder="Digite sua observação aqui..."
+                    placeholderTextColor="#CCDBDC"
+                />
 
             <Modal
                 transparent={true}
@@ -324,4 +341,14 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold'
     },
+
+    textArea: {
+        borderWidth: 1,
+        borderColor: '#CCDBDC',
+        borderRadius: 5,
+        padding: 10,
+        textAlignVertical: 'top',
+        fontSize: 16,
+        color: '#CCDBDC',
+      },
 })

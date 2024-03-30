@@ -1,14 +1,14 @@
-.containerCenter{
+import styled from "styled-components";
+
+export const Container = styled.div`
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: var(--gray-900);
-    
-}
+`;
 
-.login{
+export const Content = styled.main`
     margin-top: 2rem;
     width: 600px;
     display: flex;
@@ -18,7 +18,7 @@
     padding: 2rem 1.5rem;
 
     h1{
-        color: var(--white);
+        color: ${props => props.theme.colors.white};
         padding-bottom: 1rem;
     }
 
@@ -32,16 +32,10 @@
         height: 40px;
         font-size: 1.2rem;
     }
-}
+`;
 
-.text{
+export const Text = styled.p`
     margin-top: 1rem;
-    color: var(--white);
+    color: ${props => props.theme.colors.white};
     cursor: pointer;
-}
-
-@media (max-width: 620px){
-    .login{
-        width: 90%;
-    }
-}
+`;

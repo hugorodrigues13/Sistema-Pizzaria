@@ -1,6 +1,7 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import Head from 'next/head'
 import styles from './styles.module.scss'
+import { Container } from './styles'
 import { canSSRAuth } from '@/utils/canSSRAuth'
 import { Header } from '@/components/Header'
 import { toast } from 'react-toastify'
@@ -92,15 +93,13 @@ export default function Product( {categoryList}: CategoryProps ){
             <Head>
                 <title>Novo produto - Sujeito Pizzaria</title>
             </Head>
-            <div>
                 <Header/>
             
-                <main className={styles.container}>
+                <Container>
                     <h1>Novo produto</h1>
 
-                    <form className={styles.form} onSubmit={handleRegister}>
-
-                        <label className={styles.labelAvatar}>
+                    <form onSubmit={handleRegister}>
+                        <label>
                             <span>
                                 <FiUpload size={25} color="FFF" />
                             </span>
@@ -109,12 +108,12 @@ export default function Product( {categoryList}: CategoryProps ){
 
                             {avatarUrl && (
                                  <img
-                                    className={styles.preview}
+                                    className="preview"
                                     src={avatarUrl} 
                                     alt="Foto do produto"
                                     width={220}
                                     height={220}
-                             />
+                                />
                             )}
                         </label>
 
@@ -129,7 +128,7 @@ export default function Product( {categoryList}: CategoryProps ){
                         </select>
 
                         <input
-                            className={styles.input}
+                            className="input"
                             type="text"
                             placeholder='Digite o nome do produto'
                             value={name}
@@ -137,7 +136,7 @@ export default function Product( {categoryList}: CategoryProps ){
                         />
 
                         <input
-                            className={styles.input}
+                            className="input"
                             type="text"
                             placeholder='Preço do produto'
                             value={price}
@@ -145,18 +144,17 @@ export default function Product( {categoryList}: CategoryProps ){
                         />
 
                         <textarea
-                            className={styles.input}
+                            className="input"
                             placeholder='Descreva seu produto...'
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
 
-                        <button className={styles.buttonAdd} type="submit">
+                        <button className="buttonAdd" type="submit">
                             Cadastrar
                         </button>
                     </form>
-                </main>
-            </div>
+                </Container>
         </>
     )
 }
