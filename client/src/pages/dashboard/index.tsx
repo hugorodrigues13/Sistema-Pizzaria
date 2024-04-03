@@ -105,19 +105,19 @@ export default function Dashboard({orders}: HomeProps){
                             color="#80FFDB" 
                             name="Concluídos"
                             icon="concluido"
-                            table="200"
+                            table={orderList.filter(item => item.status && !item.draft).length.toString()}
                         />
                         <BoxCard 
-                            color="#40A2E3" 
+                            color="#80CED7" 
                             name="Em andamento"
                             icon="andamento"
-                            table="200"
+                            table={orderList.filter(item => !item.status && !item.draft).length.toString()}
                         />
                         <BoxCard 
                             color="#FF3F4B" 
                             name="Cancelados"
                             icon="cancelado"
-                            table="200"
+                            table={orderList.filter(item => item.status && item.draft).length.toString()}
                         />
                     </Card>
                     <Body>

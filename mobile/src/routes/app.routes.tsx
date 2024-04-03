@@ -18,6 +18,7 @@ export type StackPramsList = {
     };
     FinishOrder: {
         number: number | string;
+        name: string | null;
         order_id: string;
     };
 }
