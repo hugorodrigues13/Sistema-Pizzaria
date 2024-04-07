@@ -17,11 +17,15 @@ export const Card = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    padding: 1rem;
     margin-bottom: 2rem;
+    border-radius: 12px;
+    background-color: ${props => props.theme.colors.tertiary};
 `;
 
 export const Body = styled.div`
     background-color: ${props => props.theme.colors.tertiary};
+    border-radius: 12px;
     padding: 1rem;
 `;
 
@@ -44,7 +48,7 @@ export const HeaderContent = styled.div`
 export const ListOrders = styled.article`
     display: flex;
     flex-direction: column;
-    height: 380px;
+    max-height: 380px;
     overflow-y: auto;
 
     scrollbar-width: thin; /* Firefox */

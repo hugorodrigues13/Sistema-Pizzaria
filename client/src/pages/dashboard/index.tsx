@@ -51,6 +51,8 @@ export default function Dashboard({orders}: HomeProps){
     const [modalItem, setModalItem] = useState<OrderItemProps[]>()
     const [modalVisible, setModalVisible] = useState(false)
 
+    const filteredOrders = orderList.filter(item => !item.draft && !item.status);
+
     function handleCloseModal(){
         setModalVisible(false)
     }
@@ -68,7 +70,7 @@ export default function Dashboard({orders}: HomeProps){
         setModalVisible(true)
     }
 
-   async function handleFinishItem(id: string){
+    async function handleFinishItem(id: string){
        const apiClient = setupAPIClient()
 
        await apiClient.put('/order/finish', {
@@ -129,20 +131,19 @@ export default function Dashboard({orders}: HomeProps){
                         </HeaderContent>
 
                         <ListOrders>
-                            {orderList.length === 0 && (
-                                <span className="emptyList">
-                                    Nenhum pedido aberto foi encontrado...
-                                </span>
-                            )}
 
-                            {orderList.map(item => (
-                                <section key={item.id} className="orderItem">
-                                    <button onClick={() => handleOpenModal(item.id)}>
-                                        <div className="tag"></div>
-                                        <span>Pedido Nº: {item.table}</span>
-                                    </button>
-                                </section>
-                            ))}
+                        {filteredOrders.length === 0 ? (
+                                <span className="emptyList">Nenhum item na listagem</span>
+                            ) : (
+                                filteredOrders.map(item => (
+                                    <section key={item.id} className="orderItem">
+                                        <button onClick={() => handleOpenModal(item.id)}>
+                                            <div className="tag"></div>
+                                            <span>Pedido Nº: {item.table}</span>
+                                        </button>
+                                    </section>
+                                ))
+                            )}
                         </ListOrders>
                     </Body> 
                 </Container>
