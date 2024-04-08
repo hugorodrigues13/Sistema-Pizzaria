@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.main`
     max-width: 1080px;
-    margin: 4rem auto;
+    margin: 0 auto;
     padding: 0 2rem;
 
     display: flex;
@@ -18,7 +18,7 @@ export const Card = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     padding: 1rem;
-    margin-bottom: 2rem;
+    margin: 2rem 0;
     border-radius: 12px;
     background-color: ${props => props.theme.colors.tertiary};
 `;
