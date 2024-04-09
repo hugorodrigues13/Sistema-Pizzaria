@@ -5,9 +5,9 @@ class CancelOrderController{
     async handle(req: Request, res: Response) {
         const {order_id} = req.body;
 
-        const sendOrder = new CancelOrderService();
+        const cancelOrder = new CancelOrderService();
 
-        const order = await sendOrder.execute({
+        const order = await cancelOrder.execute({
             order_id,
         })
 
