@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput, Modal, FlatList, Alert} from 'react-native';
 
 import {useRoute, RouteProp, useNavigation} from '@react-navigation/native';
 import {Feather} from '@expo/vector-icons';
@@ -14,7 +14,7 @@ type RouteDetailParams = {
     Order: {
         order_id: string;
         number: string | number;
-        name: string;
+        name: string | null;
     }
 }
 
@@ -113,42 +113,39 @@ export default function Order(){
                 amount: Number(amount)
             })
     
+            if (!response.data.success) {
+                // Se a operação não for bem-sucedida, exiba a mensagem de erro
+                Alert.alert('AVISO', response.data.message);
+                return;
+            }
+    
             let data = {
-                id: response.data.id,
+                id: response.data.order.id,
                 product_id: productSelected?.id as string,
                 name: productSelected?.name as string,
                 amount: Number(amount)
             }
     
-            const existingItemIndex = items.findIndex(item => item.product_id === data.product_id);
-    
-            if (existingItemIndex !== -1) {
-                // Se o item já estiver na lista, atualize a quantidade
-                const updatedItems = [...items];
-                updatedItems[existingItemIndex].amount += data.amount;
-                setItems(updatedItems);
-            } else {
-                // Se o item não estiver na lista, adicione-o normalmente
-                setItems(oldArray => [...oldArray, data]);
-            }
+            // Adicione o item à lista
+            setItems(oldArray => [...oldArray, data]);
         } catch (error) {
             console.error('Erro ao adicionar item:', error);
         }
     }
 
     async function handleDeleteItem(item_id: string){
-       await api.delete('/order/remove', {
-            params: {
-                item_id: item_id
-            }
-       })
-
-       // após remover da api removemos esse item da nossa lista de items
-       let removeItem = items.filter(item => {
-         return (item.id !== item_id)
-       })
-
-       setItems(removeItem)
+        try {
+            await api.delete('/order/remove', {
+                params: {
+                    item_id: item_id
+                }
+            });
+    
+            // Após a remoção bem-sucedida do servidor, remova o item da lista local
+            setItems(prevItems => prevItems.filter(item => item.id !== item_id));
+        } catch (error) {
+            console.error('Erro ao excluir item:', error);
+        }
     }
 
     async function handleObservationChange(name: string) {
@@ -160,6 +157,7 @@ export default function Order(){
         navigation.navigate('FinishOrder', { 
             number: route.params?.number,
             order_id: route.params?.order_id,
+            name: observation,
         })
     }
 
@@ -221,12 +219,12 @@ export default function Order(){
                 renderItem={({item}) => <ListItem data={item} deleteItem={handleDeleteItem}/>}
             />
 
-                <TextInput
+            <TextInput
                     style={styles.textArea}
                     multiline
                     numberOfLines={4}
                     value={observation}
-                    onChangeText={handleObservationChange}
+                    onChangeText={setObservation}
                     placeholder="Digite sua observação aqui..."
                     placeholderTextColor="#CCDBDC"
                 />

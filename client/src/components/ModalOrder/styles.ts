@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 export const Container = styled.div`
     width: 620px;
-    background-color: ${props => props.theme.colors.gray};
-    color: ${props => props.theme.colors.primary};
+    background-color: ${props => props.theme.colors.primary};
+    color: ${props => props.theme.colors.gray};
 
 @media screen and (max-width: 700px){
         width: 430px;
@@ -29,7 +29,7 @@ export const HeaderContent = styled.header`
 
     .numberOrder {
         font-size: 1.4rem;
-        color: ${props => props.theme.colors.tertiary};
+        color: ${props => props.theme.colors.success};
     }
 
 `;
@@ -44,7 +44,7 @@ export const Content = styled.div`
     > p {
         width: 65%;
         font-size: 1.5rem;
-        color: ${props => props.theme.colors.tertiary};
+        color: ${props => props.theme.colors.gray};
         border-bottom: dashed 1px;
         margin-bottom: 1rem;
     }
@@ -54,16 +54,15 @@ export const Content = styled.div`
         height: 80px;
         margin: 1rem 0;
         border: 1px solid;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
+        padding: 0.3rem;
         text-align: start;
-        color: ${props => props.theme.colors.primary};
+        color: ${props => props.theme.colors.gray};
         font-size: 1rem;
         overflow-y: auto;
         word-wrap: break-word;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: #C1C7C8 ${props => props.theme.colors.gray}; /* Firefox */
+        scrollbar-color: ${props => props.theme.colors.secondary} ${props => props.theme.colors.tertiary}; /* Firefox */
     }
 
 `;
@@ -75,15 +74,22 @@ export const ListContent = styled.div`
         overflow-y: auto;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: ${props => props.theme.colors.gray} #C1C7C8; /* Firefox */
+        scrollbar-color: ${props => props.theme.colors.secondary} ${props => props.theme.colors.tertiary};/* Firefox */
 
         .containerItem{
             display: flex;
+            width: 100%;
             flex-direction: column;
             margin-bottom: 1rem;
 
+            span{
+                color: ${props => props.theme.colors.gray};
+                font-size: 1.2rem;
+                font-weight: bold;
+                }
+
             strong{
-                color: ${props => props.theme.colors.primary};
+                color: ${props => props.theme.colors.info};
                 font-size: 1.2rem;
             }
         }
@@ -103,7 +109,7 @@ export const ButtonFooter = styled.footer`
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${props => props.theme.colors.primary};
+            color: ${props => props.theme.colors.success};
             transition: transform 0.5s;
 
             font-weight: bold;
@@ -116,7 +122,7 @@ export const ButtonFooter = styled.footer`
         .buttonCancel {
             margin-top: 1.5rem;
             height: 30px;
-            border: solid 1px;
+            border: 1px solid ${props => props.theme.colors.info};
             border-radius: 0.5rem;
             background-color: transparent;
             width: 160px;
@@ -124,6 +130,7 @@ export const ButtonFooter = styled.footer`
             align-items: center;
             justify-content: center;
             color: ${props => props.theme.colors.info};
+            background-color: transparent;
             transition: transform 0.5s;
 
             font-weight: bold;

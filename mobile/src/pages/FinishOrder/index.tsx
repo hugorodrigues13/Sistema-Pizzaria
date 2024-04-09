@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity, TextInput} from 'react-native';
 import { Feather } from '@expo/vector-icons'
 
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
@@ -12,7 +12,7 @@ type RouteDetailParams = {
     FinishOrder: {
         number: string | number;
         order_id: string;
-        name: string;
+        name: string | null;
     }
 }
 
@@ -26,6 +26,7 @@ export default function FinishOrder(){
         try{
             await api.put('/order/send', {
                 order_id: route.params?.order_id,
+                name: route.params?.name
             })
 
             navigation.popToTop()
@@ -85,6 +86,16 @@ const styles = StyleSheet.create({
         marginRight: 8,
         fontWeight: 'bold',
         color: '#CCDBDC',
-    }
+    },
+    textArea: {
+        width: '90%',
+        borderWidth: 1,
+        borderColor: '#CCDBDC',
+        borderRadius: 5,
+        padding: 10,
+        textAlignVertical: 'top',
+        fontSize: 16,
+        color: '#CCDBDC',
+      },
     
 })

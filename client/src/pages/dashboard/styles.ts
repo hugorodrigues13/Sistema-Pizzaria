@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.main`
     max-width: 1080px;
-    margin: 4rem auto;
+    margin: 0 auto;
     padding: 0 2rem;
 
     display: flex;
@@ -17,11 +17,15 @@ export const Card = styled.div`
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
-    margin-bottom: 2rem;
+    padding: 1rem;
+    margin: 2rem 0;
+    border-radius: 12px;
+    background-color: ${props => props.theme.colors.tertiary};
 `;
 
 export const Body = styled.div`
     background-color: ${props => props.theme.colors.tertiary};
+    border-radius: 12px;
     padding: 1rem;
 `;
 
@@ -44,7 +48,7 @@ export const HeaderContent = styled.div`
 export const ListOrders = styled.article`
     display: flex;
     flex-direction: column;
-    height: 380px;
+    max-height: 380px;
     overflow-y: auto;
 
     scrollbar-width: thin; /* Firefox */
@@ -71,11 +75,13 @@ export const ListOrders = styled.article`
     .orderItem {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
         background-color: ${props => props.theme.colors.blue};
         margin-bottom: 1rem;
         margin: 0 1rem 1rem 0;
         align-items: center;
         border-radius: 12px;
+        padding-right: 0.5rem;
 
         > button{
             border: 0;
@@ -95,4 +101,5 @@ export const ListOrders = styled.article`
         border-radius: 12px 0 0 12px;
         margin-right: 1rem;
     }
+
 `;

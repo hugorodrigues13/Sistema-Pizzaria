@@ -16,6 +16,7 @@ export default function Dashboard(){
 
     async function openOrder(){
         if(number === ''){
+            alert("Insira um número para o pedido")
             return;
         }
 

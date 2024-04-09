@@ -28,7 +28,7 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder}: 
             right: 'auto',
             padding: '30px',
             transform: 'translate(-50%, -50%)',
-            backgroundColor: '#CCDBDC',
+            backgroundColor: '#003249',
         },
         overlay: {
             backgroundColor: 'rgba(0, 0, 0, 0.5)' // Aqui você pode definir a cor de fundo desejada, 0.5 é a opacidade
@@ -74,9 +74,7 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder}: 
                         {groupedItems && Object.values(groupedItems).map(item => (
                             
                                 <section key={item.id} className="containerItem">
-                                    <div>
-                                        <strong>{item.amount} - {item.product.name}</strong>
-                                    </div>
+                                        <span><strong>{item.amount}</strong> - {item.product.name}</span>
                                 </section>
                                 
                             ))}

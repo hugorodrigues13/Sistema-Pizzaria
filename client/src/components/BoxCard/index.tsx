@@ -35,8 +35,9 @@ export const BoxCard = ({table, name, icon, color}: IBoxCard) => {
                 <div className="cardItem">
                     <h3>{name}</h3>
                     <h1>
-                        {table}
+                        <CountUp end={parseInt(table)} />
                     </h1>
+
                 </div>
             <Image src={iconSelected()} alt={name}  priority={true} />
         </Container>
