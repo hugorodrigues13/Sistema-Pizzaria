@@ -75,11 +75,13 @@ export const ListOrders = styled.article`
     .orderItem {
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
         background-color: ${props => props.theme.colors.blue};
         margin-bottom: 1rem;
         margin: 0 1rem 1rem 0;
         align-items: center;
         border-radius: 12px;
+        padding-right: 0.5rem;
 
         > button{
             border: 0;
@@ -99,4 +101,5 @@ export const ListOrders = styled.article`
         border-radius: 12px 0 0 12px;
         margin-right: 1rem;
     }
+
 `;

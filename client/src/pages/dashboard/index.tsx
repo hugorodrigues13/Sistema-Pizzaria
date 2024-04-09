@@ -56,8 +56,6 @@ export default function Dashboard({orders}: HomeProps){
     const [modalItem, setModalItem] = useState<OrderItemProps[]>()
     const [modalVisible, setModalVisible] = useState(false)
 
-    const listTypeOrders = orderList.filter(item => !item.draft && !item.status);
-
     const filteredOrders = useMemo(() => {
         return orderList.filter(order => {
             const orderDate = new Date(order.created_at);
@@ -230,19 +228,24 @@ export default function Dashboard({orders}: HomeProps){
                         </HeaderContent>
 
                         <ListOrders>
-
-                        {filteredOrders.length === 0 ? (
-                                <span className="emptyList">Nenhum item na listagem</span>
-                            ) : (
-                                filteredOrders.map(item => (
-                                    <section key={item.id} className="orderItem">
-                                        <button onClick={() => handleOpenModal(item.id)}>
-                                            <div className="tag"></div>
-                                            <span>Pedido Nº: {item.table}</span>
-                                        </button>
-                                    </section>
-                                ))
-                            )}
+                            {filteredOrders.length === 0 ? (
+                                    <span className="emptyList">Nenhum item na listagem</span>
+                                ) : (
+                                    filteredOrders.map(item => {
+                                        const createdDate = new Date(item.created_at);
+                                        const formattedTime = `${createdDate.getHours()}:${String(createdDate.getMinutes()).padStart(2, '0')}`;
+                        
+                                        return (
+                                            <section key={item.id} className="orderItem">
+                                                <button onClick={() => handleOpenModal(item.id)}>
+                                                    <div className="tag"></div>
+                                                    <span>Pedido Nº: {item.table}</span>
+                                                </button>
+                                                <span>{formattedTime}</span>
+                                            </section>
+                                        );
+                                    })
+                                )}
                         </ListOrders>
                     </Body> 
                 </Container>

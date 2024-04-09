@@ -62,7 +62,7 @@ export const Content = styled.div`
         word-wrap: break-word;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: #002435 ${props => props.theme.colors.primary}; /* Firefox */
+        scrollbar-color: ${props => props.theme.colors.secondary} ${props => props.theme.colors.tertiary}; /* Firefox */
     }
 
 `;
@@ -74,7 +74,7 @@ export const ListContent = styled.div`
         overflow-y: auto;
 
         scrollbar-width: thin; /* Firefox */
-        scrollbar-color: ${props => props.theme.colors.primary} #C1C7C8; /* Firefox */
+        scrollbar-color: ${props => props.theme.colors.secondary} ${props => props.theme.colors.tertiary};/* Firefox */
 
         .containerItem{
             display: flex;
@@ -83,9 +83,9 @@ export const ListContent = styled.div`
             margin-bottom: 1rem;
 
             span{
-                    color: ${props => props.theme.colors.gray};
-                    font-size: 1.2rem;
-                    font-weight: bold;
+                color: ${props => props.theme.colors.gray};
+                font-size: 1.2rem;
+                font-weight: bold;
                 }
 
             strong{
