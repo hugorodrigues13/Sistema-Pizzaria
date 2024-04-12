@@ -16,6 +16,8 @@ import { FilterHeader } from "@/components/FilterHeader"
 import { SelectInput } from "@/components/SelectInput"
 import { listOfMonths } from "@/utils/month"
 
+import { toast } from 'react-toastify';
+
 type ListOrders = {
     id: string;
     name: string | null;
@@ -174,6 +176,21 @@ export default function Dashboard({orders}: HomeProps){
 
        setOrderList(response.data)
        setModalVisible(false)
+       toast.success("Pedido concluído com sucesso!")
+    }
+
+    async function handleCancelOrder(id: string){
+        const apiClient = setupAPIClient()
+
+        await apiClient.put('/order/cancel', {
+           order_id: id,
+        })
+ 
+        const response = await apiClient.get('/orders')
+ 
+        setOrderList(response.data)
+        setModalVisible(false)
+        toast.success("Pedido cancelado!")
     }
 
     async function handlRefreshOrders(){
@@ -255,7 +272,8 @@ export default function Dashboard({orders}: HomeProps){
                         isOpen={modalVisible}
                         onRequestClose={handleCloseModal}
                         order={modalItem}
-                        handleFinishOrder={ handleFinishItem}
+                        handleFinishOrder={handleFinishItem}
+                        handleCancelOrder={handleCancelOrder}
                     />
                 )}
 
