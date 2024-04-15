@@ -208,9 +208,7 @@ export default function Dashboard({orders}: HomeProps){
            <Head>
                 <title>Painel - Sujeito Pizzaria</title>
            </Head>
-           <>
-                <Header/>
-
+            <Header/>
                 <Container>
                     <FilterHeader title="Filtros de pesquisa:" lineColor="#D9D9D9">
                         <SelectInput options={months} onChange={(e) => handleMonthSelected(e.target.value)} defaultValue={monthSelected}/>
@@ -278,7 +276,6 @@ export default function Dashboard({orders}: HomeProps){
                 )}
 
            </>
-        </>
     )
 }
 

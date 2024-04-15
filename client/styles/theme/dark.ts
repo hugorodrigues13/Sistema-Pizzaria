@@ -11,6 +11,8 @@ export default {
         gray: '#CCDBDC',
         blue: '#80CED7',
 
+        listColor: '#E4E6E6',
+
         success: '#80FFDB',
         info: '#FF3F4B',
         warning: '#40A2E3',
