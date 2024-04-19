@@ -5,9 +5,30 @@ import { Header } from '@/components/Header';
 import { canSSRAuth } from '@/utils/canSSRAuth';
 
 import { ListContainer } from '@/components/ListContainer';
+import { setupAPIClient } from '@/services/api';
 
-const ListCategory = ({}) => {
+interface Category {
+    id: string;
+    name: string;
+}
 
+interface Product {
+    id: string;
+    name: string;
+    category_id: string;
+}
+
+interface ListCategoryProps {
+    categories: Category[];
+    products: Product[];
+}
+
+
+const ListCategory = ({categories, products}: ListCategoryProps) => {
+    const getCategoryProductStatus = (categoryId: string) => {
+        // Verifica se algum produto possui o category_id correspondente à categoria
+        return products.some(product => product.category_id === categoryId) ? "SIM" : "NAO";
+    };
 
     return (
         <>
@@ -18,7 +39,10 @@ const ListCategory = ({}) => {
             </Head>
              <Header/>
                 <Container>
-                    <ListContainer/>
+                    <ListContainer
+                        getCategoryProductStatus={getCategoryProductStatus}
+                        data={categories}
+                    />
                     
                 </Container>
         </>
@@ -28,9 +52,16 @@ const ListCategory = ({}) => {
 export default ListCategory;
 
 export const getServerSideProps = canSSRAuth( async (ctx) => {
+    const apiClient = setupAPIClient(ctx);
+
+    const responseCategory = await apiClient.get('/category')
+    const responseProduct = await apiClient.get('/category/product')
 
     return {
-        props: {}
+        props: {
+            categories: responseCategory.data,
+            products: responseProduct.data
+        }
     }
 
 })

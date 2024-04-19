@@ -10,32 +10,46 @@ export const Container = styled.header`
     justify-content: space-between;
     align-items: center;
 
-    img{
+    img {
         cursor: pointer;
+        max-width: 100%;
+        height: auto;
+        transition: all 0.5s; /* Adicionando transição para suavizar a mudança */
+    }
+
+    @media screen and (max-width: 700px) {
+        img {
+            max-width: 80%; /* Reduzindo o tamanho da imagem para 80% da largura da tela */
+        }
     }
 `;
 
 export const NavHeader = styled.nav`
     display: flex;
-    width: 30%;
-    justify-content: space-between;
     align-items: center;
 
     button{
         display: flex;
         color: ${props => props.theme.colors.gray};
         background-color: transparent;
+        align-items: center;
         border: 0;
-        transition: transform 0.2s;
+        transition: transform 0.5s;
+
+        >svg {
+            margin-left: 2rem;
+            font-size: 20px;
+        }
 
         &:hover{
-            transform: scale(1.1);
+            transform: scale3d(1.2, 1.2, 1);
             color: ${props => props.theme.colors.white};
         }
     }
 
     .menuItem {
         position: relative;
+        margin: 0 1rem;
     }
 
     .menuNav {
@@ -43,7 +57,7 @@ export const NavHeader = styled.nav`
         padding: 0 0.5rem;
         display: inline-block;
         position: relative;
-        transition: color 0.7s;
+        transition: color 0.5s;
     
         &:hover{
             color: ${props => props.theme.colors.info};
@@ -68,10 +82,10 @@ export const NavHeader = styled.nav`
             padding: 0.5rem;
             color: ${props => props.theme.colors.primary};
 
-            transition: transform 0.2s;
+            transition: transform 0.5s;
 
             &:hover{
-                transform: scale(1.1);
+                transform: scale3d(1.1, 1.1, 1)
             }
         }
     }
@@ -99,5 +113,20 @@ export const NavHeader = styled.nav`
         transform: rotate(180deg);
     }
 
+@media screen and (max-width: 700px) {
+        p {
+            font-size: 0.8rem; /* Reduzindo o tamanho da fonte */
+        }
+
+        button {
+            font-size: 0.8rem;
+
+            >svg {
+            font-size: 1rem;
+        }
+
+     }
+
+}
     
 `;

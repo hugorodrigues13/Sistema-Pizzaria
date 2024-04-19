@@ -115,8 +115,8 @@ export function Header(){
                       
                           {activeSubMenuProduct === 2 && (
                           <div className='submenu'>
-                                <Link href='/product'>
-                                  <p>Cadastrar</p>
+                              <Link href='/product'>
+                                <p>Cadastrar</p>
                               </Link>
                               <Link href="/product/list">
                               <p>Listar todos</p>
@@ -126,7 +126,7 @@ export function Header(){
                   </div>
 
                   <button onClick={signOut}>
-                      <FiLogOut color="CCDBDC" size={24} />
+                      <FiLogOut color="CCDBDC" />
                   </button>
                 </NavHeader>
         </Container>

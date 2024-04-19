@@ -4,11 +4,19 @@ export const Container = styled.main`
     width: 100%;
     background-color: ${props => props.theme.colors.white};
     margin: 0 auto;
+
 `;
 
 export const Table = styled.table`
     width: 100%;
     border-collapse: collapse;
+
+    @media screen and (max-width: 700px) {
+        td {
+            font-size: 0.8rem; /* Reduzindo o tamanho da fonte */
+        }
+
+}
 `;
 
 export const Thead = styled.thead`
@@ -97,4 +105,20 @@ export const RightAlignedCell = styled(Cell)`
     text-align: center;
     border-left: 1px solid #fff; /* Adiciona uma borda esquerda em todas as células */
     width: 10%;
+
+    >span {
+        display: inline-block;
+        width: 2rem; /* Definindo um tamanho fixo para ambos os textos */
+        text-align: center;
+        font-weight: bold;
+    }
+
+    >svg {
+        cursor: pointer;
+        transition: transform 0.5s;
+
+        &:hover{
+            transform: scale3d(1.2, 1.2, 1)
+        }
+    }
 `;
