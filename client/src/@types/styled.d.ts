@@ -14,6 +14,8 @@ declare module 'styled-components' {
             gray: string,
             blue: string,
 
+            listColor: string,
+
             success: string,
             info: string,
             warning: string,

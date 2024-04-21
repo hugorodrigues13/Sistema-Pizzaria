@@ -14,6 +14,7 @@ export const Container = styled.main<IContainerProps>`
     overflow: hidden;
 
     > img {
+        display: block;
         width: auto;
         height: 100%;
         position: absolute;
@@ -21,6 +22,7 @@ export const Container = styled.main<IContainerProps>`
         right: 0;
 
         opacity: .5;
+        pointer-events: none;
     }
 
     .cardItem{

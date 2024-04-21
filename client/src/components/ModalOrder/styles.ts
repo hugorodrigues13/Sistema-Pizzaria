@@ -99,45 +99,31 @@ export const ButtonFooter = styled.footer`
         display: flex;
         justify-content: space-between;
 
-        .buttonOrder {
+        button {
             margin-top: 1.5rem;
             height: 30px;
-            border: solid 1px;
             border-radius: 0.5rem;
             background-color: transparent;
             width: 160px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: ${props => props.theme.colors.success};
-            transition: transform 0.5s;
-
             font-weight: bold;
+            transition: transform 0.5s;
 
             &:hover{
                 transform: scale(1.1);
             }
         }
 
+        .buttonOrder {
+            border: solid 1px;
+            color: ${props => props.theme.colors.success};
+        }
+
         .buttonCancel {
-            margin-top: 1.5rem;
-            height: 30px;
-            border: 1px solid ${props => props.theme.colors.info};
-            border-radius: 0.5rem;
-            background-color: transparent;
-            width: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border: 1px solid;
             color: ${props => props.theme.colors.info};
-            background-color: transparent;
-            transition: transform 0.5s;
-
-            font-weight: bold;
-
-            &:hover{
-                transform: scale(1.1);
-            }
         }
 
 `;
