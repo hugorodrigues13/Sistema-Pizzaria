@@ -101,6 +101,7 @@ export const LeftAlignedCell = styled(Cell)`
     text-align: left;
     padding: 0 1rem;
     width: 60%;
+    font-weight: bold;
 
     button {
         display: flex;

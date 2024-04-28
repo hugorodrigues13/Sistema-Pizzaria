@@ -18,6 +18,8 @@ import { DetailOrderController } from './controllers/order/DetailOrderController
 import { FinishOrderController } from './controllers/order/FinishOrderController';
 import { CancelOrderController } from './controllers/order/CancelOrderController';
 import { RemoveCategoryController } from './controllers/category/RemoveCategoryController';
+import { RemoveProductController } from './controllers/product/RemoveProductController';
+import { ListProductController } from './controllers/product/ListProductController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 
@@ -40,6 +42,8 @@ router.delete('/category/remove', isAuthenticated, new RemoveCategoryController(
 //-- ROTAS PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'), new CreateProductController().handle)
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle)
+router.delete('/product/remove', isAuthenticated, new RemoveProductController().handle)
+router.get('/product', isAuthenticated, new ListProductController().handle)
 
 //-- ROTAS ORDER
 router.post('/order', isAuthenticated, new CreateOrderController().handle)

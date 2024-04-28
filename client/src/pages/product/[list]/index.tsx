@@ -8,36 +8,34 @@ import { ListContainer } from '@/components/ListContainer';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
 
-interface Category {
-    id: string;
-    name: string;
-}
 
 interface Product {
     id: string;
     name: string;
-    category_id: string;
+    category: {
+        id: string;
+        name: string;
+    };
 }
 
-interface ListCategoryProps {
-    categories: Category[];
+interface ListProductProps {
     products: Product[];
 }
 
 
-const ListCategory = ({ categories, products }: ListCategoryProps) => {
-    const [sortedItems, setSortedItems] = useState([...(categories || [])]);
+const ListProducts = ({ products }: ListProductProps) => {
+    const [sortedItems, setSortedItems] = useState([...(products || [])]);
 
-    const getStatusForItem = (id: string) => {
-      const associatedProducts = products.filter(product => product.category_id === id);
-      return associatedProducts.length > 0 ? "SIM" : "NAO";
-  };
+    const getCategoryNameForItem = (id: string) => {
+        const product = products.find(product => product.id === id);
+        return product ? product.category.name : "";
+    };
 
     // Sua função que traz a listagem e ordena os itens
     const getSortedItems = async () => {
         try {
             const apiClient = setupAPIClient();
-            const response = await apiClient.get('/category');
+            const response = await apiClient.get('/product');
             const sortedItems = response.data; // Assumindo que a API já retorna a lista ordenada
             return sortedItems;
 
@@ -52,15 +50,10 @@ const ListCategory = ({ categories, products }: ListCategoryProps) => {
     };
 
     const handleDeleteItem = async (id: string) => {
-        const status = getStatusForItem(id);
-        if (status === "SIM") {
-          // Se houver produtos vinculados, exiba uma mensagem de erro
-          toast.error("Não é possível excluir categorias com produtos vinculados.");
-        } else {
-          try {
+        try {
             // Faça a solicitação de exclusão do item para o servidor
             const apiClient = setupAPIClient();
-            await apiClient.delete(`/category/remove?category_id=${id}`);
+            await apiClient.delete(`/product/remove?product_id=${id}`);
 
             // Se a exclusão for bem-sucedida, atualize a lista de categorias
             toast.success("Item excluído com sucesso!");
@@ -71,7 +64,6 @@ const ListCategory = ({ categories, products }: ListCategoryProps) => {
             // Se ocorrer um erro durante a exclusão, exiba uma mensagem de erro
             toast.error("Ocorreu um erro ao excluir o item.");
         }
-      }
     };
 
     return (
@@ -85,26 +77,24 @@ const ListCategory = ({ categories, products }: ListCategoryProps) => {
             <Container>
                 <ListContainer
                     handleDeleteItem={handleDeleteItem}
-                    getDataStatus={getStatusForItem}
+                    getDataStatus={getCategoryNameForItem}
                     data={sortedItems}
-                    statusLabel="PRODUTOS"
+                    statusLabel="CATEGORIA"
                 />
             </Container>
         </>
     )
 }
 
-export default ListCategory;
+export default ListProducts;
 
 export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClient = setupAPIClient(ctx);
 
-    const responseCategory = await apiClient.get('/category')
-    const responseProduct = await apiClient.get('/category/product')
+    const responseProduct = await apiClient.get('/product')
 
     return {
         props: {
-            categories: responseCategory.data,
             products: responseProduct.data
         }
     }
