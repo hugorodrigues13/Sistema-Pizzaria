@@ -9,6 +9,7 @@ export const Container = styled.main`
 export const Table = styled.table`
     width: 100%;
     background-color: ${props => props.theme.colors.white};
+    font-size: 1.1rem;
     border-collapse: collapse;
 
  @media screen and (max-width: 700px) {
@@ -102,6 +103,7 @@ export const LeftAlignedCell = styled(Cell)`
     padding: 0 1rem;
     width: 60%;
     font-weight: bold;
+    
 
     button {
         display: flex;
@@ -124,7 +126,7 @@ export const LeftAlignedCell = styled(Cell)`
 export const RightAlignedCell = styled(Cell)`
     text-align: center;
     border-left: 1px solid #fff; /* Adiciona uma borda esquerda em todas as células */
-    width: 10%;
+    width: 15%;
 
     button {
         display: flex;
@@ -144,17 +146,16 @@ export const RightAlignedCell = styled(Cell)`
     }
 
     .sim {
-        font-size: 1.1rem;
         color: ${(props) => props.theme.colors.primary}; /* Estilo para "SIM" */
     }
 
     .nao {
-        font-size: 1.0rem;
         color: red; /* Estilo para "NAO" */
     }
 
     >svg {
         cursor: pointer;
+        margin: 0 0.5rem;
         transition: transform 0.5s;
 
         &:hover{

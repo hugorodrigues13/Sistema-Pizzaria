@@ -7,46 +7,58 @@ import { canSSRAuth } from '@/utils/canSSRAuth';
 import { ListContainer } from '@/components/ListContainer';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
-
+import { EditModal } from '@/components/ModalEdit';
+import Modal from 'react-modal'
 
 interface Product {
     id: string;
     name: string;
+    price: string;
+    description: string;
+    banner: string;
     category: {
         id: string;
         name: string;
     };
 }
 
+interface Category {
+    id: string;
+    name: string;
+}
+
 interface ListProductProps {
+    categories: Category[];
     products: Product[];
 }
 
-
-const ListProducts = ({ products }: ListProductProps) => {
+const ListProducts = ({ products, categories }: ListProductProps) => {
     const [sortedItems, setSortedItems] = useState([...(products || [])]);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+    const handleEditClick = async (product: Product) => {
+        console.log("Editando produto:", product);
+
+        return new Promise((resolve, reject) => {
+            // Simula uma requisição assíncrona para carregar os dados do produto
+            setTimeout(() => {
+                // Aqui você faria a lógica para carregar os dados do produto de forma assíncrona
+                // Se a lógica de carregamento dos dados for bem-sucedida, resolva a Promise com o produto
+                resolve(product);
+                
+                // Se ocorrer algum erro durante o carregamento dos dados, rejeite a Promise
+                // reject(new Error("Erro ao carregar os dados do produto"));
+            }, 1000); // Simula um tempo de espera de 1 segundo (você pode ajustar conforme necessário)
+
+            setEditingProduct(product); // Atualiza o estado editingProduct com os dados do produto clicado
+            setShowEditModal(true);
+    });
+    };
 
     const getCategoryNameForItem = (id: string) => {
         const product = products.find(product => product.id === id);
         return product ? product.category.name : "";
-    };
-
-    // Sua função que traz a listagem e ordena os itens
-    const getSortedItems = async () => {
-        try {
-            const apiClient = setupAPIClient();
-            const response = await apiClient.get('/product');
-            const sortedItems = response.data; // Assumindo que a API já retorna a lista ordenada
-            return sortedItems;
-
-        } catch (error) {
-            return [];
-        }
-    };
-
-    const fetchOrders = async () => {
-        const sortedItems = await getSortedItems();
-        setSortedItems(sortedItems);
     };
 
     const handleDeleteItem = async (id: string) => {
@@ -58,13 +70,17 @@ const ListProducts = ({ products }: ListProductProps) => {
             // Se a exclusão for bem-sucedida, atualize a lista de categorias
             toast.success("Item excluído com sucesso!");
 
-            await fetchOrders();
+            // Atualize a lista de produtos após a exclusão
+            const updatedProducts = products.filter(product => product.id !== id);
+            setSortedItems(updatedProducts);
 
         } catch (error) {
             // Se ocorrer um erro durante a exclusão, exiba uma mensagem de erro
             toast.error("Ocorreu um erro ao excluir o item.");
         }
     };
+
+    Modal.setAppElement('#__next')
 
     return (
         <>
@@ -78,8 +94,15 @@ const ListProducts = ({ products }: ListProductProps) => {
                 <ListContainer
                     handleDeleteItem={handleDeleteItem}
                     getDataStatus={getCategoryNameForItem}
+                    handleEditClick={handleEditClick}
                     data={sortedItems}
                     statusLabel="CATEGORIA"
+                />
+                <EditModal
+                    show={showEditModal}
+                    handleClose={() => setShowEditModal(false)}
+                    product={editingProduct}
+                    categories={categories} // Passe as categorias como propriedade
                 />
             </Container>
         </>
@@ -92,9 +115,11 @@ export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClient = setupAPIClient(ctx);
 
     const responseProduct = await apiClient.get('/product')
+    const responseCategory = await apiClient.get('/category')
 
     return {
         props: {
+            categories: responseCategory.data,
             products: responseProduct.data
         }
     }

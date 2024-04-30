@@ -14,24 +14,55 @@ import {
         ModalDelete,
         SearchFilter
     } from "./styles";
-import { FiChevronDown, FiChevronLeft, FiChevronRight, FiChevronUp, FiSearch } from "react-icons/fi";
-import { FiTrash2 } from "react-icons/fi";
+
+import formatCurrency from "@/utils/formatCurrency";
+
+import { 
+    FiChevronDown, 
+    FiChevronLeft, 
+    FiChevronRight, 
+    FiChevronUp, 
+    FiSearch, 
+    FiEdit3, 
+    FiTrash2
+ } from "react-icons/fi";
+import { EditModal } from "../ModalEdit";
 
 interface Item {
     id: string;
     name: string;
+    description: string;
+    price: string;
+    banner: string;
+    category: {
+        id: string;
+        name: string;
+    }
+}
+
+type ProductItem = {
+    id: string;
+    name: string;
+    description: string;
+    price: string;
+    banner: string;
+    category: {
+        id: string;
+        name: string;
+    }
 }
 
 interface ListContainerProps {
     getDataStatus?: (id: string) => string ;
     handleDeleteItem: (id: string) => void;
+    handleEditClick: (product: ProductItem) => void
     data: Item[];
     statusLabel?: string;
 }
 
 const ITEMS_PER_PAGE = 10;
 
-export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLabel }: ListContainerProps) => {
+export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLabel, handleEditClick }: ListContainerProps) => {
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -97,6 +128,7 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
                                 </button>
                             </LeftAlignedCell>
                             <RightAlignedCell>{statusLabel}</RightAlignedCell>
+                            {statusLabel === "CATEGORIA" && <RightAlignedCell>PREÇO</RightAlignedCell>}
                             <RightAlignedCell>AÇÕES</RightAlignedCell>
                         </TitleRow>
                     </Thead>
@@ -111,9 +143,18 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
                                         </span>
                                     )}
                                 </RightAlignedCell>
+                                {statusLabel === "CATEGORIA" && (
+                                    <RightAlignedCell>
+                                        <span>
+                                            {formatCurrency(item.price)}
+                                        </span>
+                                    </RightAlignedCell>
+                                )}
                                 <RightAlignedCell>
+                                    {/* Adiciona um evento onClick para chamar handleEditClick */}
+                                    <FiEdit3 size={20} onClick={() => handleEditClick(item)} />
                                     <FiTrash2 
-                                        size={20} 
+                                        size={20}   
                                         color="#FF3F4B"
                                         onClick={() => {
                                             setItemToDelete(item.id);
@@ -155,3 +196,4 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
         </>
     );
 };
+
