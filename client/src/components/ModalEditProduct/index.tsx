@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 import { Container, HeaderModal, FormBody, ImgLabel } from './styles';
 import { FiX, FiUpload } from "react-icons/fi";
 import formatCurrency from '@/utils/formatCurrency';
-import CurrencyFormat from 'react-currency-format';
+import CurrencyInput from '../CurrencyInput';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
 import { canSSRAuth } from '@/utils/canSSRAuth';
@@ -70,14 +70,16 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
         setAvatarUrl(URL.createObjectURL(image));
     };
 
-    const handleValueChange = (values: any) => {
-        const { value } = values;
-        if (value === '' && values.floatValue === 0 && values.formattedValue === '') {
-            return { value: '', formattedValue: '' };
-        } else {
-            setPrice(values.value);
-        }
-    };
+    const handleInputChange = (event: any) => {
+        const inputValue = event.target.value;
+        const unmaskedValue = inputValue.replace(/[^\d]/g, ''); // Remove todos os caracteres não numéricos
+        const intValue = parseInt(unmaskedValue || '0', 10); // Converte para inteiro
+    
+        // Formata o valor para a exibição desejada
+        const formatted = (intValue / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    
+        setPrice(formatted);
+      };
 
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
@@ -132,11 +134,6 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
             toast.error("Ops, ocorreu um erro ao atualizar o produto!");
         }
     }
-    
-    
-    
-    
-    
 
     return (
         <Modal
@@ -185,6 +182,7 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                     />
+
                     <div className='div-row'>
                         <select
                             value={categorySelected?.name ?? ''}
@@ -203,18 +201,12 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
                                 <option value="">Carregando...</option>
                             )}
                         </select>
-                        <CurrencyFormat
-                            value={formatCurrency(price)}
-                            onValueChange={(values) => handleValueChange(values)}
-                            thousandSeparator=""
-                            decimalSeparator=","
-                            prefix="R$ "
-                            allowNegative={false}
-                            decimalScale={2}
-                            fixedDecimalScale={true}
-                            placeholder="Digite o valor"
-                            inputMode="numeric"
+
+                        <CurrencyInput
+                            value={price}
+                            onChange={setPrice}
                         />
+                        
                     </div>
                     <input
                         type='text'

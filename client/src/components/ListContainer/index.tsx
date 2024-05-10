@@ -153,7 +153,7 @@ export const ListContainer = ({
                                 </button>
                             </LeftAlignedCell>
                             <RightAlignedCell>{statusLabel}</RightAlignedCell>
-                            {statusLabel === "CATEGORIA" && <RightAlignedCell>PREÇO</RightAlignedCell>}
+                            <RightAlignedCell>PREÇO</RightAlignedCell>
                             <RightAlignedCell>AÇÕES</RightAlignedCell>
                         </TitleRow>
                     </Thead>
@@ -163,18 +163,16 @@ export const ListContainer = ({
                                 <LeftAlignedCell>{item.name}</LeftAlignedCell>
                                 <RightAlignedCell>
                                     {getDataStatus && (
-                                        <span className={getDataStatus(item.id) === "NAO" ? "nao" : "sim"}>
-                                            {item.category.name} {/* Mostra o nome da categoria */}
+                                        <span className={getDataStatus(item.id)}>
+                                            {item.category.name}
                                         </span>
                                     )}
                                 </RightAlignedCell>
-                                {statusLabel === "CATEGORIA" && (
                                     <RightAlignedCell>
                                         <span>
                                             {formatCurrency(item.price)}
                                         </span>
                                     </RightAlignedCell>
-                                )}
                                 <RightAlignedCell>
                                     {/* Adiciona um evento onClick para chamar handleEditClick */}
                                     <FiEdit3 size={20} onClick={() => handleEditClick(item)} />
