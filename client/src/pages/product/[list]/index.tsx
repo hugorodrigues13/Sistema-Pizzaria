@@ -7,7 +7,7 @@ import { canSSRAuth } from '@/utils/canSSRAuth';
 import { ListContainer } from '@/components/ListContainer';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
-import { EditModal } from '@/components/ModalEdit';
+import { EditModal } from '@/components/ModalEditProduct';
 import Modal from 'react-modal'
 
 interface Product {
@@ -34,6 +34,8 @@ interface ListProductProps {
 
 const ListProducts = ({ products, categories }: ListProductProps) => {
     const [sortedItems, setSortedItems] = useState([...(products || [])]);
+    const [sortedCategories, setSortedCategories] = useState([...(categories || [])]);
+
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -54,6 +56,15 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
             setEditingProduct(product); // Atualiza o estado editingProduct com os dados do produto clicado
             setShowEditModal(true);
     });
+    };
+
+    // Função para atualizar a lista de produtos
+    const setProducts = (updatedProducts: Product[]) => {
+        setSortedItems(updatedProducts);
+    };
+
+    const setCategory = (updatedCategories: Category[]) => {
+        setSortedCategories(updatedCategories);
     };
 
     const getCategoryNameForItem = (id: string) => {
@@ -91,19 +102,18 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
             </Head>
             <Header />
             <Container>
-                <ListContainer
-                    handleDeleteItem={handleDeleteItem}
-                    getDataStatus={getCategoryNameForItem}
-                    handleEditClick={handleEditClick}
-                    data={sortedItems}
-                    statusLabel="CATEGORIA"
-                />
-                <EditModal
-                    show={showEditModal}
-                    handleClose={() => setShowEditModal(false)}
-                    product={editingProduct}
-                    categories={categories} // Passe as categorias como propriedade
-                />
+            <ListContainer
+                handleDeleteItem={handleDeleteItem}
+                getDataStatus={getCategoryNameForItem}
+                handleEditClick={handleEditClick}
+                data={sortedItems}
+                statusLabel="CATEGORIA"
+                setProducts={setProducts}
+                categories={categories}
+                showEditModal={showEditModal}
+                setShowEditModal={setShowEditModal}
+                editingProduct={editingProduct}
+            />
             </Container>
         </>
     )

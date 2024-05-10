@@ -21,6 +21,7 @@ import { RemoveCategoryController } from './controllers/category/RemoveCategoryC
 import { RemoveProductController } from './controllers/product/RemoveProductController';
 import { ListProductController } from './controllers/product/ListProductController';
 import { UpdateProductController } from './controllers/product/UpdateProductController';
+import { UpdateCategoryController } from './controllers/category/UpdateCategoryController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 
@@ -39,6 +40,7 @@ router.get('/me', isAuthenticated, new DetailUserController().handle)
 router.post('/category', isAuthenticated, new CreateCategoryController().handle)
 router.get('/category', isAuthenticated, new ListCategoryController().handle)
 router.delete('/category/remove', isAuthenticated, new RemoveCategoryController().handle)
+router.put('/category/update', isAuthenticated, new UpdateCategoryController().handle)
 
 //-- ROTAS PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'), new CreateProductController().handle)

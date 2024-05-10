@@ -1,14 +1,12 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Modal from 'react-modal';
 import { Container, HeaderModal, FormBody, ImgLabel } from './styles';
-import { FiX, FiUpload } from "react-icons/fi"; // Adicionando o ícone FiUpload
+import { FiX, FiUpload } from "react-icons/fi";
 import formatCurrency from '@/utils/formatCurrency';
 import CurrencyFormat from 'react-currency-format';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
 import { canSSRAuth } from '@/utils/canSSRAuth';
-
-
 
 type ProductData = {
     id: string;
@@ -22,14 +20,21 @@ type ProductData = {
     };
 }
 
+type CategoryData = {
+    id: string;
+    name: string;
+}
+
 interface EditModalProps {
     show: boolean;
     handleClose: () => void;
     product: ProductData | null;
-    categories: { id: string; name: string }[];
+    products: ProductData[];
+    categories: CategoryData[] | null;
+    setProducts: (updatedProducts: ProductData[]) => void;
 }
 
-export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product, categories }) => {
+export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product, categories, setProducts, products }) => {
     if (!product) {
         return null;
     }
@@ -41,15 +46,15 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
     const [name, setName] = useState<string>(initialName);
     const [description, setDescription] = useState<string>(initialDescription);
     const [price, setPrice] = useState<string>(initialPrice);
-    const [categorySelected, setCategorySelected] = useState<number>(0);
-
+    const [categorySelected, setCategorySelected] = useState<CategoryData | null>(category);
+  
     useEffect(() => {
-        if (product) {
-            const { name: initialName, description: initialDescription, price: initialPrice, category, banner } = product;
+        if (product && categories) {
+            const { name: initialName, description: initialDescription, price: initialPrice, category: initialCategory, banner } = product;
             setName(initialName);
             setDescription(initialDescription);
             setPrice(initialPrice);
-            setCategorySelected(categories.findIndex(cat => cat.id === category.id));
+            setCategorySelected(initialCategory);
             setAvatarUrl(`http://localhost:3333/files/${banner}`);
         }
     }, [product, categories]);
@@ -76,44 +81,62 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
 
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
-
+    
         try {
             const data = new FormData();
-
+    
             if (name === '' || price === '' || description === '') {
                 toast.warning("Preencha todos os campos");
                 return;
             }
-
+    
             data.append('product_id', productId);
             data.append('name', name);
             data.append('price', price);
             data.append('description', description);
-            data.append('category_id', categories[categorySelected].id);
-
-            // Se uma nova imagem foi selecionada, enviamos ela. Caso contrário, enviamos a imagem atual do produto.
+            data.append('category_id', (categorySelected && categorySelected.id) ?? '');
+    
             if (imageAvatar !== null) {
                 data.append('file', imageAvatar);
             } else {
-                // Obter a imagem atual do produto do backend e enviá-la
                 const currentImageResponse = await fetch(`http://localhost:3333/files/${banner}`);
                 const currentImageBlob = await currentImageResponse.blob();
                 data.append('file', currentImageBlob);
             }
-
+    
+            console.log("Data to be sent to the server:", data);
+    
             const apiClient = setupAPIClient();
-
-            await apiClient.put(`/product/update/`, data);
-
+    
+            const response = await apiClient.put(`/product/update/`, data);
+            const updatedProductData = response.data; // Use response.data to access the data from the response
+    
+            const updatedProductIndex = products.findIndex(p => p.id === productId);
+            if (updatedProductIndex !== -1) {
+                const updatedProduct = {
+                    ...updatedProductData,
+                    category: categorySelected || { id: '', name: '' }
+                };
+                const updatedProducts = [...products];
+                updatedProducts[updatedProductIndex] = updatedProduct;
+                setProducts(updatedProducts);
+                console.log(updatedProducts)
+            }
+    
             toast.success('Produto atualizado com sucesso!');
-
+    
             handleClose();
-
+    
         } catch (err) {
             console.error(err);
             toast.error("Ops, ocorreu um erro ao atualizar o produto!");
         }
     }
+    
+    
+    
+    
+    
 
     return (
         <Modal
@@ -164,14 +187,21 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
                     />
                     <div className='div-row'>
                         <select
-                            value={categorySelected}
-                            onChange={(e) => setCategorySelected(parseInt(e.target.value))}
+                            value={categorySelected?.name ?? ''}
+                            onChange={(e) => {
+                                const selectedCategory = categories?.find(cat => cat.name === e.target.value);
+                                setCategorySelected(selectedCategory ?? null);
+                            }}
                         >
-                            {categories.map((cat, index) => (
-                                <option key={cat.id} value={index}>
-                                    {cat.name}
-                                </option>
-                            ))}
+                            {categories ? (
+                                categories.map((cat) => (
+                                    <option key={cat.id} value={cat.name}>
+                                        {cat.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option value="">Carregando...</option>
+                            )}
                         </select>
                         <CurrencyFormat
                             value={formatCurrency(price)}
@@ -182,7 +212,6 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
                             allowNegative={false}
                             decimalScale={2}
                             fixedDecimalScale={true}
-                            allowLeadingZeros={false}
                             placeholder="Digite o valor"
                             inputMode="numeric"
                         />
@@ -202,16 +231,3 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
         </Modal>
     );
 };
-
-export const getServerSideProps = canSSRAuth( async (ctx) => {
-    const apiClient = setupAPIClient(ctx)
-
-    return {
-        props: {
-        }
-    }
-
-})
-
-
-

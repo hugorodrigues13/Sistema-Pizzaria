@@ -1,19 +1,19 @@
 import React, { ReactNode, useState } from "react";
 import { 
-        Container, 
-        Thead, 
-        Tbody, 
-        Table, 
-        TitleRow, 
-        LeftAlignedCell, 
-        RightAlignedCell, 
-        DataRow, 
-        Pagination, 
-        PrevButton, 
-        NextButton,
-        ModalDelete,
-        SearchFilter
-    } from "./styles";
+    Container, 
+    Thead, 
+    Tbody, 
+    Table, 
+    TitleRow, 
+    LeftAlignedCell, 
+    RightAlignedCell, 
+    DataRow, 
+    Pagination, 
+    PrevButton, 
+    NextButton,
+    ModalDelete,
+    SearchFilter
+} from "./styles";
 
 import formatCurrency from "@/utils/formatCurrency";
 
@@ -25,8 +25,8 @@ import {
     FiSearch, 
     FiEdit3, 
     FiTrash2
- } from "react-icons/fi";
-import { EditModal } from "../ModalEdit";
+} from "react-icons/fi";
+import { EditModal } from "../ModalEditProduct";
 
 interface Item {
     id: string;
@@ -52,17 +52,38 @@ type ProductItem = {
     }
 }
 
+type Category = {
+    id: string;
+    name: string;
+}
+
 interface ListContainerProps {
-    getDataStatus?: (id: string) => string ;
+    getDataStatus?: (id: string) => string;
     handleDeleteItem: (id: string) => void;
     handleEditClick: (product: ProductItem) => void
     data: Item[];
     statusLabel?: string;
+    setProducts: (updatedProducts: Item[]) => void;
+    categories: Category[];
+    showEditModal: boolean;
+    setShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
+    editingProduct: ProductItem | null;
 }
 
 const ITEMS_PER_PAGE = 10;
 
-export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLabel, handleEditClick }: ListContainerProps) => {
+export const ListContainer = ({ 
+    data, 
+    getDataStatus, 
+    handleDeleteItem, 
+    statusLabel, 
+    handleEditClick, 
+    setProducts, 
+    categories, 
+    showEditModal,
+    setShowEditModal,
+    editingProduct
+ }: ListContainerProps) => {
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
     const [currentPage, setCurrentPage] = useState(1);
     const [showConfirmation, setShowConfirmation] = useState(false);
@@ -99,6 +120,10 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
             setItemToDelete(null);
             setShowConfirmation(false);
         }
+    };
+
+    const handleUpdateProduct = (updatedProducts: Item[]) => {
+        setProducts(updatedProducts);
     };
 
     return (
@@ -139,7 +164,7 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
                                 <RightAlignedCell>
                                     {getDataStatus && (
                                         <span className={getDataStatus(item.id) === "NAO" ? "nao" : "sim"}>
-                                            {getDataStatus(item.id)}
+                                            {item.category.name} {/* Mostra o nome da categoria */}
                                         </span>
                                     )}
                                 </RightAlignedCell>
@@ -192,6 +217,15 @@ export const ListContainer = ({ data, getDataStatus, handleDeleteItem, statusLab
                         </div>
                     </ModalDelete>
                 )}
+
+                <EditModal
+                    show={showEditModal}
+                    handleClose={() => setShowEditModal(false)}
+                    product={editingProduct}
+                    categories={categories}
+                    setProducts={handleUpdateProduct}
+                    products={data}
+                />
             </Container>
         </>
     );
