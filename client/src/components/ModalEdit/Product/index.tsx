@@ -1,12 +1,10 @@
 import React, { useState, useEffect, FormEvent } from 'react';
 import Modal from 'react-modal';
-import { Container, HeaderModal, FormBody, ImgLabel } from './styles';
+import { Container, HeaderModal, FormBody, ImgLabel } from '../styles';
 import { FiX, FiUpload } from "react-icons/fi";
-import formatCurrency from '@/utils/formatCurrency';
-import CurrencyInput from '../CurrencyInput';
+import CurrencyInput from '../../CurrencyInput';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
-import { canSSRAuth } from '@/utils/canSSRAuth';
 
 type ProductData = {
     id: string;
@@ -35,10 +33,8 @@ interface EditModalProps {
 }
 
 export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product, categories, setProducts, products }) => {
-    if (!product) {
-        return null;
-    }
-
+    if (!product) { return null }
+    const [editedData, setEditedData] = useState<Partial<ProductData>>({});
     const { id: productId, name: initialName, description: initialDescription, price: initialPrice, category, banner } = product;
 
     const [avatarUrl, setAvatarUrl] = useState<string>(`http://localhost:3333/files/${banner}`);
@@ -69,17 +65,6 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
         setImageAvatar(image);
         setAvatarUrl(URL.createObjectURL(image));
     };
-
-    const handleInputChange = (event: any) => {
-        const inputValue = event.target.value;
-        const unmaskedValue = inputValue.replace(/[^\d]/g, ''); // Remove todos os caracteres não numéricos
-        const intValue = parseInt(unmaskedValue || '0', 10); // Converte para inteiro
-    
-        // Formata o valor para a exibição desejada
-        const formatted = (intValue / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    
-        setPrice(formatted);
-      };
 
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
@@ -134,6 +119,20 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
             toast.error("Ops, ocorreu um erro ao atualizar o produto!");
         }
     }
+
+    useEffect(() => {
+        if (!show) {
+            // Reset only edited data when the modal is closed without saving
+            setName(initialName);
+            setDescription(initialDescription);
+            setPrice(initialPrice);
+            setCategorySelected(category);
+            setAvatarUrl(`http://localhost:3333/files/${banner}`);
+            setEditedData({});
+        }
+    }, [show]);
+
+    Modal.setAppElement('#__next')
 
     return (
         <Modal

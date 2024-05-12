@@ -13,7 +13,7 @@ import {
     NextButton,
     ModalDelete,
     SearchFilter
-} from "./styles";
+} from "../styles";
 
 import formatCurrency from "@/utils/formatCurrency";
 
@@ -24,9 +24,10 @@ import {
     FiChevronUp, 
     FiSearch, 
     FiEdit3, 
-    FiTrash2
+    FiTrash2,
+    FiEdit
 } from "react-icons/fi";
-import { EditModal } from "../ModalEditProduct";
+import { EditModal } from "../../ModalEdit/Product";
 
 interface Item {
     id: string;
@@ -175,7 +176,10 @@ export const ListContainer = ({
                                     </RightAlignedCell>
                                 <RightAlignedCell>
                                     {/* Adiciona um evento onClick para chamar handleEditClick */}
-                                    <FiEdit3 size={20} onClick={() => handleEditClick(item)} />
+                                    <FiEdit 
+                                        size={20}
+                                        color="#3F3FFF"
+                                        onClick={() => handleEditClick(item)} />
                                     <FiTrash2 
                                         size={20}   
                                         color="#FF3F4B"

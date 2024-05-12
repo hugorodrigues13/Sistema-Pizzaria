@@ -4,10 +4,9 @@ import Head from 'next/head';
 import { Header } from '@/components/Header';
 import { canSSRAuth } from '@/utils/canSSRAuth';
 
-import { ListContainer } from '@/components/ListContainer';
+import { ListContainer } from '@/components/ListContainer/Product';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
-import { EditModal } from '@/components/ModalEditProduct';
 import Modal from 'react-modal'
 
 interface Product {
@@ -34,8 +33,6 @@ interface ListProductProps {
 
 const ListProducts = ({ products, categories }: ListProductProps) => {
     const [sortedItems, setSortedItems] = useState([...(products || [])]);
-    const [sortedCategories, setSortedCategories] = useState([...(categories || [])]);
-
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
@@ -55,7 +52,7 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
 
             setEditingProduct(product); // Atualiza o estado editingProduct com os dados do produto clicado
             setShowEditModal(true);
-    });
+      });
     };
 
     // Função para atualizar a lista de produtos
@@ -63,9 +60,6 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
         setSortedItems(updatedProducts);
     };
 
-    const setCategory = (updatedCategories: Category[]) => {
-        setSortedCategories(updatedCategories);
-    };
 
     const getCategoryNameForItem = (id: string) => {
         const product = products.find(product => product.id === id);
