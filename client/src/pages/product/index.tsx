@@ -6,6 +6,8 @@ import { canSSRAuth } from '@/utils/canSSRAuth'
 import { Header } from '@/components/Header'
 import { toast } from 'react-toastify'
 
+import CurrencyInput from '@/components/CurrencyInput'
+
 import { FiUpload } from 'react-icons/fi'
 import { setupAPIClient } from '@/services/api'
 
@@ -135,12 +137,12 @@ export default function Product( {categoryList}: CategoryProps ){
                             onChange={(e) => setName(e.target.value)}
                         />
 
-                        <input
+                        <CurrencyInput
                             className="input"
                             type="text"
                             placeholder='Preço do produto'
                             value={price}
-                            onChange={(e) => setPrice(e.target.value)}
+                            onChange={setPrice}
                         />
 
                         <textarea

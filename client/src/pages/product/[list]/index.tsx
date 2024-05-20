@@ -35,6 +35,8 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
     const [sortedItems, setSortedItems] = useState([...(products || [])]);
     const [showEditModal, setShowEditModal] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [searchTerm, setSearchTerm] = useState<string>("");
+
 
     const handleEditClick = async (product: Product) => {
         console.log("Editando produto:", product);
@@ -60,7 +62,6 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
         setSortedItems(updatedProducts);
     };
 
-
     const getCategoryNameForItem = (id: string) => {
         const product = products.find(product => product.id === id);
         return product ? product.category.name : "";
@@ -71,20 +72,30 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
             // Faça a solicitação de exclusão do item para o servidor
             const apiClient = setupAPIClient();
             await apiClient.delete(`/product/remove?product_id=${id}`);
-
+    
             // Se a exclusão for bem-sucedida, atualize a lista de categorias
             toast.success("Item excluído com sucesso!");
-
+    
             // Atualize a lista de produtos após a exclusão
-            const updatedProducts = products.filter(product => product.id !== id);
-            setSortedItems(updatedProducts);
-
+            const updatedProducts = sortedItems.filter(product => product.id !== id); // Usar sortedItems em vez de products
+    
+            console.log("Produtos atualizados após exclusão:", updatedProducts);
+    
+            // Atualize o estado sortedItems com a nova lista filtrada
+            const filteredItems = searchTerm ? updatedProducts.filter(item => item.name.toLowerCase().includes(searchTerm.toLowerCase())) : updatedProducts;
+    
+            console.log("Itens filtrados após exclusão:", filteredItems);
+    
+            setSortedItems(filteredItems);
+    
         } catch (error) {
             // Se ocorrer um erro durante a exclusão, exiba uma mensagem de erro
             toast.error("Ocorreu um erro ao excluir o item.");
         }
     };
-
+    
+    
+    
     Modal.setAppElement('#__next')
 
     return (

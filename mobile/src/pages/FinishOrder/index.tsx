@@ -13,7 +13,8 @@ type RouteDetailParams = {
         number: string | number;
         order_id: string;
         name: string | null;
-    }
+        price: string;
+    },
 }
 
 type FinishOrderRouteProp = RouteProp<RouteDetailParams, 'FinishOrder'>
@@ -26,7 +27,8 @@ export default function FinishOrder(){
         try{
             await api.put('/order/send', {
                 order_id: route.params?.order_id,
-                name: route.params?.name
+                name: route.params?.name,
+                price: route.params?.price
             })
 
             navigation.popToTop()
@@ -39,6 +41,7 @@ export default function FinishOrder(){
         <View style={styles.container}>
             <Text style={styles.alert}>Você deseja finalizar esse pedido?</Text>
             <Text style={styles.alert}>Pedido: {route.params?.number}</Text>
+            <Text style={styles.alert}>TOTAL: {route.params?.price}</Text>
 
             <TouchableOpacity style={styles.button} onPress={handleFinish}>
                 <Text style={styles.textButton}>Finalizar Pedido</Text>

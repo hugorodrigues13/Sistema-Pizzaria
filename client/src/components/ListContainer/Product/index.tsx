@@ -29,18 +29,6 @@ import {
 } from "react-icons/fi";
 import { EditModal } from "../../ModalEdit/Product";
 
-interface Item {
-    id: string;
-    name: string;
-    description: string;
-    price: string;
-    banner: string;
-    category: {
-        id: string;
-        name: string;
-    }
-}
-
 type ProductItem = {
     id: string;
     name: string;
@@ -62,9 +50,9 @@ interface ListContainerProps {
     getDataStatus?: (id: string) => string;
     handleDeleteItem: (id: string) => void;
     handleEditClick: (product: ProductItem) => void
-    data: Item[];
+    data: ProductItem[];
     statusLabel?: string;
-    setProducts: (updatedProducts: Item[]) => void;
+    setProducts: (updatedProducts: ProductItem[]) => void;
     categories: Category[];
     showEditModal: boolean;
     setShowEditModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -123,7 +111,7 @@ export const ListContainer = ({
         }
     };
 
-    const handleUpdateProduct = (updatedProducts: Item[]) => {
+    const handleUpdateProduct = (updatedProducts: ProductItem[]) => {
         setProducts(updatedProducts);
     };
 

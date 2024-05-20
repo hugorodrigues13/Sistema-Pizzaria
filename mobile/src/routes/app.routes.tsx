@@ -20,6 +20,7 @@ export type StackPramsList = {
         number: number | string;
         name: string | null;
         order_id: string;
+        price: string;
     };
 }
 

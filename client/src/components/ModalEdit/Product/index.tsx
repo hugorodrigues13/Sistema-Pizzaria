@@ -34,19 +34,17 @@ interface EditModalProps {
 
 export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product, categories, setProducts, products }) => {
     if (!product) { return null }
-    const [editedData, setEditedData] = useState<Partial<ProductData>>({});
-    const { id: productId, name: initialName, description: initialDescription, price: initialPrice, category, banner } = product;
+    const { id: productId, name: initialName, description: initialDescription, price: initialPrice, category: initialCategory, banner } = product;
 
     const [avatarUrl, setAvatarUrl] = useState<string>(`http://localhost:3333/files/${banner}`);
     const [imageAvatar, setImageAvatar] = useState<File | null>(null);
     const [name, setName] = useState<string>(initialName);
     const [description, setDescription] = useState<string>(initialDescription);
     const [price, setPrice] = useState<string>(initialPrice);
-    const [categorySelected, setCategorySelected] = useState<CategoryData | null>(category);
+    const [categorySelected, setCategorySelected] = useState<CategoryData | null>(initialCategory);
   
     useEffect(() => {
         if (product && categories) {
-            const { name: initialName, description: initialDescription, price: initialPrice, category: initialCategory, banner } = product;
             setName(initialName);
             setDescription(initialDescription);
             setPrice(initialPrice);
@@ -126,9 +124,8 @@ export const EditModal: React.FC<EditModalProps> = ({ show, handleClose, product
             setName(initialName);
             setDescription(initialDescription);
             setPrice(initialPrice);
-            setCategorySelected(category);
+            setCategorySelected(initialCategory);
             setAvatarUrl(`http://localhost:3333/files/${banner}`);
-            setEditedData({});
         }
     }, [show]);
 

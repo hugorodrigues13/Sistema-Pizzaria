@@ -1,53 +1,43 @@
-import React from "react";
-import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    TouchableOpacity,
-    ScrollView,
-} from 'react-native';
+import React from 'react';
+import { TouchableOpacity, Text, StyleSheet, Dimensions, ScrollView } from 'react-native';
+import { ProductProps } from '../../pages/Order';
 
-import {CategoryProps} from '../../pages/Order'
-
-interface ModalPickerProps{
-    options: CategoryProps[];
+interface ProductModalPickerProps {
+    options: ProductProps[];
     handleCloseModal: () => void;
-    selectedItem: (item: CategoryProps) => void;
+    selectedItem: (item: ProductProps) => void;
 }
 
 const { width: WIDTH, height: HEIGHT } = Dimensions.get('window')
 
-export function ModalPicker({ options, handleCloseModal, selectedItem}: ModalPickerProps){
+export function ModalPicker({ options, handleCloseModal, selectedItem }: ProductModalPickerProps) {
 
-    async function onPressItem(item: CategoryProps){
-        // console.log(item)
-
+    async function onPressItem(item: ProductProps) {
         selectedItem(item)
         handleCloseModal()
     }
 
     const option = options.map((item, index) => (
-        <TouchableOpacity key={index} style={styles.option} onPress={ () => onPressItem(item)}>
+        <TouchableOpacity key={index} style={styles.option} onPress={() => onPressItem(item)}>
             <Text style={styles.item}>
                 {item?.name}
             </Text>
         </TouchableOpacity>
     ))
 
-    return(
+    return (
         <TouchableOpacity style={styles.container} onPress={handleCloseModal}>
-            <View style={styles.content}>
-                <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false} style={styles.content}>
                     {option}
                 </ScrollView>
-            </View>
+            </ScrollView>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
@@ -62,7 +52,7 @@ const styles = StyleSheet.create({
         borderRadius: 4
     },
 
-    option:{
+    option: {
         alignItems: 'flex-start',
         borderTopWidth: 0.8,
         borderTopColor: '#8a8a8a'
