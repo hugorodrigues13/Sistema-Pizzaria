@@ -3,6 +3,7 @@ import { Container, HeaderContent, Content, ListContent, ButtonFooter } from './
 import {FiX} from 'react-icons/fi'
 import {OrderItemProps} from '@/pages/dashboard'
 import { useState } from 'react';
+import formatCurrency from '@/utils/formatCurrency';
 
 interface ModalOrderProps{
     isOpen: boolean;
@@ -18,6 +19,7 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder, h
 
     const tableNumber = order ? (order[0]?.order?.table ?? 'N/A') : 'N/A';
     const orderItem = order ? (order[0]?.order_id ?? 'N/A') : 'N/A';
+    const totalPrice = order ? (order[0]?.order?.price ?? 'N/A') : 'N/A';
 
     const handleCancel = () => {
         // Define o orderItem para usar dentro da função confirmCancelOrder
@@ -56,7 +58,7 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder, h
                         <FiX size={45} color='#f34748' />
                     </button>
                     <div className="numberOrder">
-                        <strong>Pedido Nº: {tableNumber}</strong>
+                        <strong>Nº: {tableNumber}</strong>
                     </div>
                 </HeaderContent>
 
@@ -75,7 +77,10 @@ export function ModalOrder({ isOpen, onRequestClose, order, handleFinishOrder, h
                         </div>
                     ) : (
                         <>
-                            <p>Detalhes do pedido</p>
+                            <div className='headerTitle'>
+                                <p>Detalhes do pedido</p>
+                                <p>Total:<strong> {formatCurrency(totalPrice)}</strong></p>
+                            </div>
                             <ListContent>
                                 {order && order.map(item => (
                                     <section key={item.id} className="containerItem">

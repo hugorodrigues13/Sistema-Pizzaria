@@ -41,12 +41,17 @@ export const Content = styled.div`
     flex-direction: column;
     padding: 1rem 0;
 
-    > p {
-        width: 65%;
-        font-size: 1.5rem;
-        color: ${props => props.theme.colors.gray};
+    .headerTitle{
+        display: flex;
+        justify-content: space-between;
         border-bottom: dashed 1px;
         margin-bottom: 1rem;
+
+        > p {
+        font-size: 1.5rem;
+        color: ${props => props.theme.colors.gray};
+    }
+
     }
 
     .scroll-container {
