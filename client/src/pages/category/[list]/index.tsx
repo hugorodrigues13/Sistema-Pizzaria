@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { Header } from '@/components/Header';
 import { canSSRAuth } from '@/utils/canSSRAuth';
 
-import { ListContainer } from '@/components/ListContainer';
+import { ListContainer } from '@/components/ListContainer/Category';
 import { setupAPIClient } from '@/services/api';
 import { toast } from 'react-toastify';
 
@@ -24,80 +24,98 @@ interface ListCategoryProps {
     products: Product[];
 }
 
-
-const ListCategory = ({categories, products}: ListCategoryProps) => {
+const ListCategory = ({ categories, products }: ListCategoryProps) => {
     const [sortedItems, setSortedItems] = useState([...(categories || [])]);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
     const getCategoryProductStatus = (categoryId: string) => {
-        // Verifica se algum produto possui o category_id correspondente à categoria
         return products.some(product => product.category_id === categoryId) ? "SIM" : "NAO";
     };
 
-    // Sua função que traz a listagem e ordena os itens
     const getSortedItems = async () => {
         try {
-          const apiClient = setupAPIClient();
-          const response = await apiClient.get('/category');
-          const sortedItems = response.data; // Assumindo que a API já retorna a lista ordenada
-          return sortedItems;
-
+            const apiClient = setupAPIClient();
+            const response = await apiClient.get('/category');
+            const sortedItems = response.data;
+            return sortedItems;
         } catch (error) {
-          return [];
+            return [];
         }
-      };
-    
-      const fetchOrders = async () => {
+    };
+
+    const fetchOrders = async () => {
         const sortedItems = await getSortedItems();
         setSortedItems(sortedItems);
-      };
+    };
 
     const handleDeleteCategory = async (id: string) => {
         const status = getCategoryProductStatus(id);
         if (status === "SIM") {
-          // Se houver produtos vinculados, exiba uma mensagem de erro
-          toast.error("Não é possível excluir categorias com produtos vinculados.");
+            toast.error("Não é possível excluir categorias com produtos vinculados.");
         } else {
-          try {
-            // Faça a solicitação de exclusão da categoria para o servidor
-            const apiClient = setupAPIClient();
-            await apiClient.delete(`/category/remove?category_id=${id}`);
-      
-            // Se a exclusão for bem-sucedida, atualize a lista de categorias
-            toast.success("Categoria excluída com sucesso!");
-      
-            await fetchOrders();
-            
-          } catch (error) {
-            // Se ocorrer um erro durante a exclusão, exiba uma mensagem de erro
-            toast.error("Ocorreu um erro ao excluir a categoria.");
-          }
+            try {
+                const apiClient = setupAPIClient();
+                await apiClient.delete(`/category/remove?category_id=${id}`);
+                toast.success("Categoria excluída com sucesso!");
+                await fetchOrders();
+            } catch (error) {
+                toast.error("Ocorreu um erro ao excluir a categoria.");
+            }
         }
-      };
+    };
+
+    const handleEditClick = (category: Category) => {
+        console.log("Editando produto:", category);
+
+        return new Promise((resolve, reject) => {
+            // Simula uma requisição assíncrona para carregar os dados do produto
+            setTimeout(() => {
+                // Aqui você faria a lógica para carregar os dados do produto de forma assíncrona
+                // Se a lógica de carregamento dos dados for bem-sucedida, resolva a Promise com o produto
+                resolve(category);
+                
+                // Se ocorrer algum erro durante o carregamento dos dados, rejeite a Promise
+                // reject(new Error("Erro ao carregar os dados do produto"));
+            }, 1000); // Simula um tempo de espera de 1 segundo (você pode ajustar conforme necessário)
+
+            setEditingCategory(category); // Atualiza o estado editingProduct com os dados do produto clicado
+            setShowEditModal(true);
+      });
+    };
+
+    // Função para atualizar a lista de produtos
+    const updateCategoryList = async () => {
+        const updatedCategories = await getSortedItems();
+        setSortedItems(updatedCategories);
+    };
 
     return (
         <>
             <Head>
-                <title>
-                    Lista de categorias
-                </title>
+                <title>Lista de categorias</title>
             </Head>
-             <Header/>
-                <Container>
-                    <ListContainer
-                        handleDeleteCategory={handleDeleteCategory}
-                        getCategoryProductStatus={getCategoryProductStatus}
-                        data={sortedItems}
-                        children="PRODUTOS"
-                    />
-                    
-                </Container>
+            <Header />
+            <Container>
+                <ListContainer
+                    handleEditClick={handleEditClick}
+                    getCategoryProductStatus={getCategoryProductStatus}
+                    handleDeleteCategory={handleDeleteCategory}
+                    data={sortedItems}
+                    showEditModal={showEditModal}
+                    setShowEditModal={setShowEditModal}
+                    editingCategory={editingCategory}
+                    updateCategoryList={updateCategoryList}
+                    children="PRODUTOS"
+                />
+            </Container>
         </>
     )
 }
 
 export default ListCategory;
 
-export const getServerSideProps = canSSRAuth( async (ctx) => {
+export const getServerSideProps = canSSRAuth(async (ctx) => {
     const apiClient = setupAPIClient(ctx);
 
     const responseCategory = await apiClient.get('/category')
@@ -109,5 +127,4 @@ export const getServerSideProps = canSSRAuth( async (ctx) => {
             products: responseProduct.data
         }
     }
-
 })

@@ -15,6 +15,7 @@ type RouteDetailParams = {
         order_id: string;
         number: string | number;
         name: string | null;
+        price: string | null;
     }
 }
 
@@ -23,9 +24,10 @@ export type CategoryProps = {
     name: string;
 }
 
-type ProductProps = {
+export type ProductProps = {
     id: string;
     name: string;
+    price?: string | null;
 }
 
 type ItemProps = {
@@ -33,6 +35,7 @@ type ItemProps = {
     name: string | null;
     product_id: string;
     amount: number;
+    price: string;
 }
 
 type OrderRouteProps = RouteProp<RouteDetailParams, 'Order'>
@@ -49,10 +52,11 @@ export default function Order(){
     const [productSelected, setProductSelected] = useState<ProductProps | undefined>()
     const [modalProductVisible, setModalProductVisible] = useState(false)
 
-    const [amount, setAmount] = useState('1')
+    const [amount, setAmount] = useState(1)
     const [items, setItems] = useState<ItemProps[]>([])
 
     const [observation, setObservation] = useState('');
+    const [totalPrice, setTotalPrice] = useState('0,00');
 
     useEffect(() => {
         async function loadInfo(){
@@ -66,7 +70,6 @@ export default function Order(){
     }, [])
 
     useEffect(() => {
-
         async function loadProducts(){
             const response = await api.get('/category/product', {
                 params: {
@@ -78,12 +81,10 @@ export default function Order(){
             setProductSelected(response.data[0])
         }
         loadProducts()
-
     }, [categorySelected])
 
     async function handleCloseOrder(){
         try{
-
             await api.delete('/order', {
                 params:{
                     order_id: route.params?.order_id
@@ -91,7 +92,6 @@ export default function Order(){
             })
 
             navigation.goBack()
-
         }catch(err){
             console.log(err)
         }
@@ -111,23 +111,38 @@ export default function Order(){
                 order_id: route.params?.order_id,
                 product_id: productSelected?.id,
                 amount: Number(amount)
-            })
+            });
     
             if (!response.data.success) {
-                // Se a operação não for bem-sucedida, exiba a mensagem de erro
                 Alert.alert('AVISO', response.data.message);
                 return;
             }
     
-            let data = {
-                id: response.data.order.id,
-                product_id: productSelected?.id as string,
-                name: productSelected?.name as string,
-                amount: Number(amount)
-            }
+            const priceString = productSelected?.price || '0';
+            const numericPrice = parseFloat(priceString.replace('R$', '').replace('.', '').replace(',', '.'));
+            const totalPriceItem = numericPrice * Number(amount);
     
-            // Adicione o item à lista
-            setItems(oldArray => [...oldArray, data]);
+            console.log(`Produto: ${productSelected?.name}, Preço Unitário: ${priceString}, Quantidade: ${amount}, Preço Total do Item: ${totalPriceItem}`);
+    
+            setItems(oldArray => [
+                ...oldArray,
+                {
+                    id: response.data.order.id,
+                    product_id: productSelected?.id as string,
+                    name: productSelected?.name as string,
+                    amount: Number(amount),
+                    price: `R$ ${totalPriceItem.toFixed(2).replace('.', ',')}`, // Armazena o preço total do item como string formatada
+                }
+            ]);
+    
+            setTotalPrice(prevPrice => {
+                const prevPriceNumber = parseFloat(prevPrice.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+                const newTotalPrice = prevPriceNumber + totalPriceItem;
+                const formattedTotalPrice = `R$ ${newTotalPrice.toFixed(2).replace('.', ',')}`;
+                console.log(`Preço Total Anterior: ${prevPrice}, Novo Preço Total: ${formattedTotalPrice}`);
+                return formattedTotalPrice;
+            });
+            setAmount(1);
         } catch (error) {
             console.error('Erro ao adicionar item:', error);
         }
@@ -141,25 +156,45 @@ export default function Order(){
                 }
             });
     
-            // Após a remoção bem-sucedida do servidor, remova o item da lista local
             setItems(prevItems => prevItems.filter(item => item.id !== item_id));
+    
+            // Recalcula o preço total após excluir o item
+            setTotalPrice(prevPrice => {
+                const removedItem = items.find(item => item.id === item_id);
+                if (removedItem) {
+                    const prevPriceNumber = parseFloat(prevPrice.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+                    const newTotalPrice = prevPriceNumber - parseFloat(removedItem.price.replace('R$', '').replace('.', '').replace(',', '.')) || 0;
+                    const formattedTotalPrice = `R$ ${newTotalPrice.toFixed(2).replace('.', ',')}`;
+                    console.log(`Preço Total Anterior: ${prevPrice}, Novo Preço Total: ${formattedTotalPrice}`);
+                    return formattedTotalPrice;
+                } else {
+                    return prevPrice;
+                }
+            });
         } catch (error) {
             console.error('Erro ao excluir item:', error);
         }
     }
-
-    async function handleObservationChange(name: string) {
-        console.log('Observation changed:', name);
-        setObservation(name);
-      };
+    
 
     function handleFinishOrder(){
         navigation.navigate('FinishOrder', { 
             number: route.params?.number,
             order_id: route.params?.order_id,
             name: observation,
+            price: totalPrice
         })
     }
+
+    const decreaseAmount = () => {
+        if (amount > 1) {
+            setAmount(amount - 1);
+        }
+    };
+
+    const increaseAmount = () => {
+        setAmount(amount + 1);
+    };
 
     return(
         <View style={styles.container}>
@@ -187,14 +222,24 @@ export default function Order(){
             )}
 
             <View style={styles.qtdContainer}>
-                <Text style={styles.qtdText}>Quantidade</Text>
-                <TextInput 
-                    style={[styles.input, {width: '60%', textAlign: 'center'}]}
-                    placeholderTextColor="#fff"
-                    keyboardType='numeric'
-                    value={amount}
-                    onChangeText={setAmount}
-                />
+                    <Text style={styles.qtdText}>Quantidade:</Text>
+                <View style={styles.inputContainer}>
+                    <TouchableOpacity onPress={decreaseAmount} style={styles.iconContainer}>
+                        <Feather name="minus" size={20} color="#fff" />
+                    </TouchableOpacity>
+                    <TextInput
+                        style={[styles.inputQtd, {width: '65%', textAlign: 'center'}]}
+                        keyboardType='numeric'
+                        value={amount.toString()}
+                        onChangeText={(text) => {
+                            const parsedAmount = parseInt(text, 10);
+                            setAmount(isNaN(parsedAmount) || parsedAmount < 1 ? 1 : parsedAmount);
+                        }}
+                    />
+                    <TouchableOpacity onPress={increaseAmount} style={styles.iconContainer}>
+                        <Feather name="plus" size={20} color="#fff" />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.actions}>
@@ -220,14 +265,14 @@ export default function Order(){
             />
 
             <TextInput
-                    style={styles.textArea}
+                style={styles.textArea}
                     multiline
                     numberOfLines={4}
                     value={observation}
                     onChangeText={setObservation}
                     placeholder="Digite sua observação aqui..."
                     placeholderTextColor="#CCDBDC"
-                />
+            />
 
             <Modal
                 transparent={true}
@@ -293,6 +338,30 @@ const styles = StyleSheet.create({
         fontSize: 20
     },
 
+    inputQtd: {
+        backgroundColor: '#007EA7',
+        borderRadius: 4,
+        width: '100%',
+        justifyContent: 'center',
+        paddingHorizontal: 8,
+        color: '#fff',
+        fontSize: 20
+    },
+
+    inputContainer: {
+        width: '65%',
+        height: 50,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#007EA7',
+        borderRadius: 5,
+    },
+
+    iconContainer: {
+        padding: 10,
+    },
+
     qtdContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -307,7 +376,8 @@ const styles = StyleSheet.create({
     actions:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%'
+        width: '100%',
+        marginTop: 16,
     },
 
     buttonAdd: {

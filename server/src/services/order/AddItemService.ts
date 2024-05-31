@@ -28,12 +28,28 @@ class AddItemService {
                 return { success: false, message: "Este produto já foi adicionado ao pedido." };
             }
 
+            // Obter o preço do produto
+            const product = await prismaClient.product.findUnique({
+                where: { id: product_id },
+            });
+
+            if (!product) {
+                return { success: false, message: "Produto não encontrado." };
+            }
+
+            // Calcular o preço total do item
+            const productPrice = parseFloat(product.price.replace('R$', '').replace('.', '').replace(',', '.'));
+            const totalPrice = (productPrice * amount).toFixed(2); // Converter para string formatada
+
+            console.log(`Produto: ${product.name}, Preço Unitário: ${product.price}, Quantidade: ${amount}, Preço Total: ${totalPrice}`);
+
             // Se o item não existir, crie-o
             const order = await prismaClient.item.create({
                 data: {
                     order_id: order_id,
                     product_id: product_id,
                     amount,
+                    price: `R$ ${totalPrice.replace('.', ',')}`, // Adiciona o preço total do item como string formatada
                 },
             });
 

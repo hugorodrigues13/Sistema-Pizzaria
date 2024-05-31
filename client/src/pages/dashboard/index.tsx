@@ -24,6 +24,7 @@ type ListOrders = {
     table: number;
     status: boolean;
     draft: boolean;
+    price: string | null;
     created_at: string;
 }
 
@@ -48,6 +49,7 @@ export type OrderItemProps = {
         table: string | number;
         status: boolean;
         name: string | null;
+        price: string | null;
     }
 }
 

@@ -18,6 +18,10 @@ import { DetailOrderController } from './controllers/order/DetailOrderController
 import { FinishOrderController } from './controllers/order/FinishOrderController';
 import { CancelOrderController } from './controllers/order/CancelOrderController';
 import { RemoveCategoryController } from './controllers/category/RemoveCategoryController';
+import { RemoveProductController } from './controllers/product/RemoveProductController';
+import { ListProductController } from './controllers/product/ListProductController';
+import { UpdateProductController } from './controllers/product/UpdateProductController';
+import { UpdateCategoryController } from './controllers/category/UpdateCategoryController';
 
 import { isAuthenticated } from './middlewares/isAuthenticated';
 
@@ -36,10 +40,14 @@ router.get('/me', isAuthenticated, new DetailUserController().handle)
 router.post('/category', isAuthenticated, new CreateCategoryController().handle)
 router.get('/category', isAuthenticated, new ListCategoryController().handle)
 router.delete('/category/remove', isAuthenticated, new RemoveCategoryController().handle)
+router.put('/category/update', isAuthenticated, new UpdateCategoryController().handle)
 
 //-- ROTAS PRODUCT
 router.post('/product', isAuthenticated, upload.single('file'), new CreateProductController().handle)
 router.get('/category/product', isAuthenticated, new ListByCategoryController().handle)
+router.delete('/product/remove', isAuthenticated, new RemoveProductController().handle)
+router.get('/product', isAuthenticated, new ListProductController().handle)
+router.put('/product/update', isAuthenticated, upload.single('file'), new UpdateProductController().handle)
 
 //-- ROTAS ORDER
 router.post('/order', isAuthenticated, new CreateOrderController().handle)
