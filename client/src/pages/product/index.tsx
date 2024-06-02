@@ -32,23 +32,26 @@ export default function Product( {categoryList}: CategoryProps ){
     const [categories, setCategories] = useState(categoryList || [])
     const [categorySelected, setCategorySelected] = useState(0)
 
-        function handleFile(e: ChangeEvent<HTMLInputElement>){
-            if(!e.target.files){
-                return;
-            }
-
-            const image = e.target.files[0];
-
-            if(!image){
-                return;
-            }
-
-            if(image.type === 'imagem/png' || image.type === 'image/jpeg'){
-
-                setImageAvatar(image);
-                setAvatarUrl(URL.createObjectURL(e.target.files[0]))
-            }
+    function handleFile(e: ChangeEvent<HTMLInputElement>){
+        if(!e.target.files){
+            return;
         }
+    
+        const image = e.target.files[0];
+    
+        if(!image){
+            return;
+        }
+    
+        // Corrigir a verificação dos tipos de imagem
+        if(image.type === 'image/png' || image.type === 'image/jpeg'){
+    
+            setImageAvatar(image);
+            setAvatarUrl(URL.createObjectURL(e.target.files[0]));
+        } else {
+            toast.error("Tipo de arquivo inválido. Selecione uma imagem PNG ou JPEG.");
+        }
+    }
 
     function handleChangeCategory(event: any){
         
@@ -56,13 +59,13 @@ export default function Product( {categoryList}: CategoryProps ){
     }
 
     async function handleRegister(e: FormEvent){
-        e.preventDefault()
-
+        e.preventDefault();
+    
         try{
-            const data = new FormData()
-
+            const data = new FormData();
+    
             if(name === '' || price === '' || description === '' || imageAvatar === null){
-                toast.warning("Preencha todos os campos")
+                toast.warning("Preencha todos os campos");
                 return;
             }
             
@@ -70,25 +73,28 @@ export default function Product( {categoryList}: CategoryProps ){
             data.append('price', price);
             data.append('description', description);
             data.append('category_id', categories[categorySelected].id);
-            data.append('file', imageAvatar)
-
+            data.append('file', imageAvatar);
+    
             const apiClient = setupAPIClient();
-
+    
             await apiClient.post('/product', data);
-
-            toast.success('Cadastrado com sucesso!')
-
-            setAvatarUrl('')
-            setName('')
-            setPrice('')
-            setDescription('')
-            setImageAvatar(null)
-
+    
+            toast.success('Cadastrado com sucesso!');
+    
+            // Limpar os campos após o cadastro
+            setAvatarUrl('');
+            setName('');
+            setPrice('');
+            setDescription('');
+            setImageAvatar(null);
+            setCategorySelected(0);
+            (document.querySelector('input[type="file"]') as HTMLInputElement).value = '';
         }catch(err){
-            console.log(err)
-            toast.error("Ops error ao cadastrar!")
+            console.log(err);
+            toast.error("Ops, erro ao cadastrar!");
         }
     }
+    
 
     return (
         <>
@@ -167,9 +173,14 @@ export const getServerSideProps = canSSRAuth( async (ctx) => {
     const response = await apiClient.get('/category')
     // console.log(response.data)
 
+    // Ordenar a lista de categorias em ordem crescente
+    const sortedCategoryList = response.data.sort((a: ItemProps, b: ItemProps) => {
+        return a.name.localeCompare(b.name)
+    })
+
     return {
         props: {
-            categoryList: response.data
+            categoryList: sortedCategoryList
         }
     }
 
