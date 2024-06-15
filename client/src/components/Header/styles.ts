@@ -34,7 +34,7 @@ export const NavHeader = styled.nav`
         background-color: transparent;
         align-items: center;
         border: 0;
-        transition: transform 0.5s;
+        transition: transform 0.8s;
 
         >svg {
             margin-left: 2rem;

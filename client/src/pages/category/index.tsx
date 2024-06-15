@@ -1,9 +1,7 @@
 import { useState, FormEvent } from "react"
 import Head from "next/head"
-import styles from './styles.module.scss'
 import { Container, MainContent } from "./styles"
 
-import { Header } from "@/components/Header"
 import { toast } from "react-toastify"
 
 import { setupAPIClient } from "@/services/api"
@@ -37,7 +35,6 @@ export default function Category(){
                 </title>
             </Head>
             <Container>
-                <Header/>
                 <MainContent>
                     <h1>Cadastrar categoria</h1>
                     <form onSubmit={handleRegister}>

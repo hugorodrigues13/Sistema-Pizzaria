@@ -86,6 +86,9 @@ export function Header(){
                 {/* <h1>{user?.name}</h1> */}
 
                 <NavHeader>
+                    <Link className='menu' href='/finances'>
+                          <button>Finanças</button>
+                    </Link>
                   <div className='menuItem'>
                       <button
                           ref={categoriaButtonRef}

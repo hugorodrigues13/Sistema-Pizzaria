@@ -101,8 +101,6 @@ export default function Product( {categoryList}: CategoryProps ){
             <Head>
                 <title>Novo produto - Sujeito Pizzaria</title>
             </Head>
-                <Header/>
-            
                 <Container>
                     <h1>Novo produto</h1>
 

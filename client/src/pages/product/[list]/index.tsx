@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Container } from './styles';
 import Head from 'next/head';
-import { Header } from '@/components/Header';
 import { canSSRAuth } from '@/utils/canSSRAuth';
 
 import { ListContainer } from '@/components/ListContainer/Product';
@@ -105,7 +104,6 @@ const ListProducts = ({ products, categories }: ListProductProps) => {
                     Lista de categorias
                 </title>
             </Head>
-            <Header />
             <Container>
             <ListContainer
                 handleDeleteItem={handleDeleteItem}
